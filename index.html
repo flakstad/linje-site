@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Linje | Transactional Outbound + Inbound Webhooks</title>
+    <meta
+      name="description"
+      content="Linje is an API-first email control-plane for transactional outbound and inbound webhook delivery. No ESP bloat."
+    />
+    <meta property="og:title" content="Linje" />
+    <meta
+      property="og:description"
+      content="Transactional outbound + inbound webhooks. API-first. Dashboard optional."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.example" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Public+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a" aria-hidden="true"></div>
+    <div class="bg-orb orb-b" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#home">Linje</a>
+      <nav>
+        <a href="#how">How It Works</a>
+        <a href="#scope">Product Boundary</a>
+        <a href="#signup" class="nav-cta" data-track="cta_nav_signup">Join Pilot</a>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero" data-reveal>
+        <p class="eyebrow">API-First Email Control-Plane</p>
+        <h1>Transactional outbound + inbound webhooks. Nothing else.</h1>
+        <p class="subhead">
+          Linje is built for teams that need reliable email infrastructure without turning into an ESP.
+          Send operational emails, ingest inbound mail as signed webhooks, and run everything by API.
+        </p>
+        <div class="hero-cta">
+          <a href="#signup" class="button button-primary" data-track="cta_hero_signup">Request pilot access</a>
+          <a href="#api" class="button button-ghost" data-track="cta_hero_api">See API model</a>
+        </div>
+      </section>
+
+      <section class="flow" aria-label="Message flow" data-reveal>
+        <div class="node">App</div>
+        <div class="line"><span></span></div>
+        <div class="node">Linje API</div>
+        <div class="line"><span></span></div>
+        <div class="node">SMTP / Provider</div>
+        <div class="line"><span></span></div>
+        <div class="node">Webhook Consumer</div>
+      </section>
+
+      <section id="how" class="panel" data-reveal>
+        <h2>How it works</h2>
+        <div class="steps">
+          <article>
+            <h3>1. Send transactional email</h3>
+            <p>POST messages with project-scoped tokens and strict sender-domain enforcement.</p>
+          </article>
+          <article>
+            <h3>2. Receive inbound as events</h3>
+            <p>Provision inboxes and receive signed webhook payloads, attachments included via signed URLs.</p>
+          </article>
+          <article>
+            <h3>3. Operate via control-plane API</h3>
+            <p>Guardrails, telemetry, cleanup, and security actions available under admin API routes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="api" class="panel two-col" data-reveal>
+        <div>
+          <h2>Strong API story</h2>
+          <p>
+            If it exists in the product, it should be available through API. Dashboard is optional.
+          </p>
+          <ul>
+            <li>Project-scoped and admin-scoped auth</li>
+            <li>Idempotency support for mutating admin control-plane endpoints</li>
+            <li>Machine-readable OpenAPI contract for admin routes</li>
+          </ul>
+        </div>
+        <pre><code>POST /v1/messages
+POST /v1/inboxes
+POST /v1/inbound
+GET  /admin/openapi.json
+GET  /admin/security/status</code></pre>
+      </section>
+
+      <section id="scope" class="panel" data-reveal>
+        <h2>What Linje is not</h2>
+        <div class="scope-grid">
+          <div>
+            <h3>Included</h3>
+            <ul>
+              <li>Transactional outbound email</li>
+              <li>Inbound webhooks with retries</li>
+              <li>Operational control-plane APIs</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Explicitly excluded</h3>
+            <ul>
+              <li>Campaigns and list management</li>
+              <li>Template editors and marketing automation</li>
+              <li>Open/click analytics suite</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="signup" class="panel signup" data-reveal>
+        <h2>Join the pilot</h2>
+        <p>
+          Tell us what you send, your rough volume, and your integration timeline.
+        </p>
+        <form id="pilot-form" novalidate>
+          <div class="form-grid">
+            <label>
+              Work email
+              <input type="email" name="email" required placeholder="you@company.com" />
+            </label>
+            <label>
+              Company
+              <input type="text" name="company" required placeholder="Acme Inc" />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required placeholder="Jane Doe" />
+            </label>
+            <label>
+              Monthly transactional volume
+              <select name="volume" required>
+                <option value="">Select</option>
+                <option value="<10k">&lt;10k</option>
+                <option value="10k-100k">10k-100k</option>
+                <option value="100k-1m">100k-1m</option>
+                <option value=">1m">&gt;1m</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Use case
+            <textarea name="use_case" rows="4" required placeholder="Password reset, receipts, inbound support replies..."></textarea>
+          </label>
+          <label class="consent">
+            <input type="checkbox" name="consent" required />
+            I agree Linje can contact me about pilot onboarding.
+          </label>
+          <button class="button button-primary" type="submit" data-track="cta_form_submit">Request access</button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Linje. API-first control-plane for transactional email.</p>
+      <p><a href="privacy.html">Privacy</a></p>
+    </footer>
+
+    <script src="site-config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
