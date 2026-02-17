@@ -1,8 +1,6 @@
 window.LinjeSiteConfig = {
-  // Example: "https://site.example.com/api/setup" (server-side proxy to Linje /admin/setup).
-  setupEndpoint: "",
-  // Used for generated curl output.
-  adminBaseUrl: "http://localhost:8080",
+  // Example: "https://site.example.com/api/signup" (server-side signup handler).
+  signupEndpoint: "",
   // Optional analytics collection endpoint.
   analyticsEndpoint: "",
   source: "linje-site"

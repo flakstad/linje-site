@@ -255,7 +255,7 @@ pre {
   gap: 1rem;
 }
 
-.setup form {
+.signup form {
   display: grid;
   gap: 0.85rem;
 }
@@ -282,24 +282,12 @@ select {
   background: #fff;
 }
 
-.checkbox-row {
+.consent {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   color: var(--muted);
-  font-weight: 500;
-}
-
-.preview-grid {
-  margin-top: 1rem;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
-}
-
-.preview-grid h3 {
-  margin: 0 0 0.45rem;
-  font-size: 1rem;
+  font-weight: 400;
 }
 
 .form-status {
@@ -368,8 +356,7 @@ footer {
   .steps,
   .two-col,
   .scope-grid,
-  .form-grid,
-  .preview-grid {
+  .form-grid {
     grid-template-columns: 1fr;
   }
 

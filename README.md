@@ -1,12 +1,12 @@
 # linje-site
 
-Public landing + self-serve setup site for Linje.
+Public landing + account signup site for Linje.
 
 ## Goals
 
 - communicate the product boundary clearly: transactional outbound + inbound webhooks
-- provide an API-first setup path for real product integrations
-- keep site concerns separate from core control-plane runtime
+- capture account signups for access to the logged-in API/admin system
+- keep marketing/site concerns separate from core control-plane runtime
 
 ## Local preview
 
@@ -20,14 +20,13 @@ python3 -m http.server 8787
 
 Edit `site-config.js`:
 
-- `setupEndpoint`: server-side proxy endpoint that accepts JSON POST payloads for setup
-- `adminBaseUrl`: shown in generated cURL snippets
-- `analyticsEndpoint`: optional endpoint for setup telemetry events
+- `signupEndpoint`: server-side endpoint that accepts JSON signup payloads
+- `analyticsEndpoint`: optional endpoint for conversion events
 
-Do not point `setupEndpoint` directly at Linje `/admin/*` from the browser.
+Do not point `signupEndpoint` directly at Linje `/admin/*` from the browser.
 The site is public, so admin credentials must stay server-side.
 
-When `setupEndpoint` is empty, generated setup payloads are saved to `localStorage` in demo mode.
+When `signupEndpoint` is empty, submissions are saved to `localStorage` in demo mode.
 
 ## Deploy (GitHub Pages)
 
@@ -39,35 +38,43 @@ Expected settings in GitHub:
 2. Source: GitHub Actions.
 3. Push to `main` to deploy.
 
-## Setup payload shape
+## Signup payload shape
 
-The form generates JSON for `POST /admin/setup` like:
+Form sends JSON like:
 
 ```json
 {
-  "project-id": "orders-api",
-  "project-webhook-url": "https://app.example.com/linje/events",
-  "from-domains": ["tx.example.com"],
-  "create-inbox": true,
-  "inbox-id": "support",
-  "inbox-webhook-url": "https://app.example.com/linje/inbound"
+  "intent": "account-signup",
+  "email": "you@company.com",
+  "company": "Acme Inc",
+  "name": "Jane Doe",
+  "volume": "10k-100k",
+  "use_case": "Password resets + receipts",
+  "use-case": "Password resets + receipts",
+  "consent": true,
+  "source": "linje-site",
+  "page": "https://linje.example/?utm_source=...",
+  "page-url": "https://linje.example/?utm_source=...",
+  "captured_at": "2026-02-17T12:34:56.000Z",
+  "captured-at": 1765802096000,
+  "utm_source": "...",
+  "utm-source": "...",
+  "utm_medium": "...",
+  "utm-medium": "...",
+  "utm_campaign": "...",
+  "utm-campaign": "...",
+  "idempotency_key": "you@company.com:1765802096000"
 }
 ```
 
-## Proxy to Linje admin API
+## Proxy pattern
 
-Recommended proxy behavior:
+Recommended server-side behavior:
 
-1. Receive site setup payload over HTTPS.
-2. Optionally validate allowed fields before forwarding.
-3. Forward to `POST /admin/setup` with `Authorization: Bearer <admin-token>`.
-4. Pass through `Idempotency-Key` from the incoming request header if present.
+1. Receive signup payload over HTTPS.
+2. Validate required fields and normalize keys.
+3. Forward into your account provisioning workflow (or temporary signup intake API).
+4. Preserve `idempotency_key` for safe retries.
 5. Return non-sensitive success/error to browser.
 
-See `examples/cloudflare-setup-proxy.js` for a minimal Worker example.
-
-## Operating notes
-
-- Keep `LINJE_ADMIN_TOKEN` only in server-side secret storage.
-- Persist setup attempts in your proxy logs/audit sink for traceability.
-- Treat returned credentials (`api-token`, webhook secrets, inbox manage-token) as one-time secrets.
+See `examples/cloudflare-signup-proxy.js` for a minimal Worker example.
