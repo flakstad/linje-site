@@ -6,7 +6,7 @@
     <title>Linje | Transactional Outbound + Inbound Webhooks</title>
     <meta
       name="description"
-      content="Linje is an API-first email control-plane for transactional outbound and inbound webhook delivery. Self-serve setup by API."
+      content="Linje is an API-first email control-plane for transactional outbound and inbound webhook delivery. No ESP bloat."
     />
     <meta property="og:title" content="Linje" />
     <meta
@@ -32,7 +32,7 @@
       <nav>
         <a href="#how">How It Works</a>
         <a href="#scope">Product Boundary</a>
-        <a href="#setup" class="nav-cta" data-track="cta_nav_setup">Self-Serve Setup</a>
+        <a href="#signup" class="nav-cta" data-track="cta_nav_signup">Create Account</a>
       </nav>
     </header>
 
@@ -41,11 +41,11 @@
         <p class="eyebrow">API-First Email Control-Plane</p>
         <h1>Transactional outbound + inbound webhooks. Nothing else.</h1>
         <p class="subhead">
-          Linje is for teams that need reliable email infrastructure without becoming an ESP.
-          Provision one product integration in a single admin API call, then send and receive by API.
+          Linje is built for teams that need reliable email infrastructure without turning into an ESP.
+          Send operational emails, ingest inbound mail as signed webhooks, and run everything by API.
         </p>
         <div class="hero-cta">
-          <a href="#setup" class="button button-primary" data-track="cta_hero_setup">Start setup</a>
+          <a href="#signup" class="button button-primary" data-track="cta_hero_signup">Create account</a>
           <a href="#api" class="button button-ghost" data-track="cta_hero_api">See API model</a>
         </div>
       </section>
@@ -69,11 +69,11 @@
           </article>
           <article>
             <h3>2. Receive inbound as events</h3>
-            <p>Provision inboxes and receive signed webhook payloads, with attachment URLs.</p>
+            <p>Provision inboxes and receive signed webhook payloads, attachments included via signed URLs.</p>
           </article>
           <article>
             <h3>3. Operate via control-plane API</h3>
-            <p>Guardrails, telemetry, and security actions live under admin API routes.</p>
+            <p>Guardrails, telemetry, cleanup, and security actions available under admin API routes.</p>
           </article>
         </div>
       </section>
@@ -82,16 +82,15 @@
         <div>
           <h2>Strong API story</h2>
           <p>
-            Everything in the product can be done by API. Dashboard is optional convenience.
+            If it exists in the product, it should be available through API. Dashboard is optional.
           </p>
           <ul>
             <li>Project-scoped and admin-scoped auth</li>
-            <li>Idempotency support for mutating admin routes</li>
-            <li>Machine-readable OpenAPI contract for `/admin/*`</li>
+            <li>Idempotency support for mutating admin control-plane endpoints</li>
+            <li>Machine-readable OpenAPI contract for admin routes</li>
           </ul>
         </div>
-        <pre><code>POST /admin/setup
-POST /v1/messages
+        <pre><code>POST /v1/messages
 POST /v1/inboxes
 POST /v1/inbound
 GET  /admin/openapi.json
@@ -120,65 +119,47 @@ GET  /admin/security/status</code></pre>
         </div>
       </section>
 
-      <section id="setup" class="panel setup" data-reveal>
-        <h2>Self-serve setup</h2>
+      <section id="signup" class="panel signup" data-reveal>
+        <h2>Create your Linje account</h2>
         <p>
-          Generate a request for <code>POST /admin/setup</code>. If <code>setupEndpoint</code> is configured,
-          this page can also submit the request through your server-side proxy.
+          Sign up to get access to the logged-in API and admin system.
         </p>
-
-        <form id="setup-form" novalidate>
+        <form id="signup-form" novalidate>
           <div class="form-grid">
             <label>
-              Project ID
-              <input type="text" name="project_id" required placeholder="orders-api" />
+              Work email
+              <input type="email" name="email" required placeholder="you@company.com" />
             </label>
             <label>
-              Outbound webhook URL
-              <input type="url" name="project_webhook_url" placeholder="https://app.example.com/linje/events" />
+              Company
+              <input type="text" name="company" required placeholder="Acme Inc" />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required placeholder="Jane Doe" />
+            </label>
+            <label>
+              Monthly transactional volume
+              <select name="volume" required>
+                <option value="">Select</option>
+                <option value="<10k">&lt;10k</option>
+                <option value="10k-100k">10k-100k</option>
+                <option value="100k-1m">100k-1m</option>
+                <option value=">1m">&gt;1m</option>
+              </select>
             </label>
           </div>
-
           <label>
-            Sender domains (comma or newline separated)
-            <textarea name="from_domains" rows="2" placeholder="tx.example.com"></textarea>
+            Primary use case
+            <textarea name="use_case" rows="4" required placeholder="Password reset, receipts, inbound support replies..."></textarea>
           </label>
-
-          <label class="checkbox-row">
-            <input type="checkbox" name="create_inbox" />
-            Create inbound inbox now
+          <label class="consent">
+            <input type="checkbox" name="consent" required />
+            I agree Linje can contact me to complete account setup.
           </label>
-
-          <div class="form-grid">
-            <label>
-              Inbox ID
-              <input type="text" name="inbox_id" placeholder="support" />
-            </label>
-            <label>
-              Inbox webhook URL
-              <input type="url" name="inbox_webhook_url" placeholder="https://app.example.com/linje/inbound" />
-            </label>
-          </div>
-
-          <label>
-            Inbox secret (optional)
-            <input type="text" name="inbox_secret" placeholder="leave blank to auto-generate" />
-          </label>
-
-          <button class="button button-primary" type="submit" data-track="cta_form_setup_submit">Generate setup</button>
+          <button class="button button-primary" type="submit" data-track="cta_form_submit">Create account</button>
           <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
         </form>
-
-        <div class="preview-grid">
-          <div>
-            <h3>Request JSON</h3>
-            <pre id="setup-preview"><code>{}</code></pre>
-          </div>
-          <div>
-            <h3>cURL</h3>
-            <pre id="curl-preview"><code>Fill the form to generate a command.</code></pre>
-          </div>
-        </div>
       </section>
     </main>
 

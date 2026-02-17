@@ -3,8 +3,7 @@
 
   var config = Object.assign(
     {
-      setupEndpoint: "",
-      adminBaseUrl: "http://localhost:8080",
+      signupEndpoint: "",
       analyticsEndpoint: "",
       source: "linje-site"
     },
@@ -27,7 +26,9 @@
 
   function sendAnalytics(eventName, payload) {
     pushDataLayer(eventName, payload);
-    if (!config.analyticsEndpoint) return;
+    if (!config.analyticsEndpoint) {
+      return;
+    }
 
     var body = JSON.stringify({
       event: eventName,
@@ -56,71 +57,31 @@
     el.className = "form-status" + (klass ? " " + klass : "");
   }
 
-  function uniq(items) {
-    var out = [];
-    items.forEach(function (item) {
-      if (out.indexOf(item) === -1) out.push(item);
-    });
-    return out;
-  }
-
-  function parseDomainList(raw) {
-    return uniq(
-      String(raw || "")
-        .split(/[\n,]/)
-        .map(function (v) {
-          return String(v || "").trim();
-        })
-        .filter(Boolean)
-    );
-  }
-
   function readForm(form) {
     var fd = new FormData(form);
-    var inboxId = String(fd.get("inbox_id") || "").trim();
-    var inboxWebhookUrl = String(fd.get("inbox_webhook_url") || "").trim();
-    var inboxSecret = String(fd.get("inbox_secret") || "").trim();
-    var createInboxChecked = !!fd.get("create_inbox");
-
     return {
-      projectId: String(fd.get("project_id") || "").trim(),
-      projectWebhookUrl: String(fd.get("project_webhook_url") || "").trim(),
-      fromDomains: parseDomainList(fd.get("from_domains")),
-      createInbox: createInboxChecked || !!inboxId || !!inboxWebhookUrl || !!inboxSecret,
-      inboxId: inboxId,
-      inboxWebhookUrl: inboxWebhookUrl,
-      inboxSecret: inboxSecret
+      email: String(fd.get("email") || "").trim(),
+      company: String(fd.get("company") || "").trim(),
+      name: String(fd.get("name") || "").trim(),
+      volume: String(fd.get("volume") || "").trim(),
+      use_case: String(fd.get("use_case") || "").trim(),
+      consent: !!fd.get("consent")
     };
   }
 
-  function validate(model) {
-    if (!model.projectId) return "Project ID is required.";
-    if (model.createInbox && !model.inboxWebhookUrl) {
-      return "Inbox webhook URL is required when creating an inbox.";
-    }
+  function validate(payload) {
+    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email);
+    if (!emailOk) return "Please provide a valid work email.";
+    if (!payload.company) return "Company is required.";
+    if (!payload.name) return "Name is required.";
+    if (!payload.volume) return "Please select monthly volume.";
+    if (!payload.use_case) return "Use case is required.";
+    if (!payload.consent) return "Consent is required.";
     return "";
   }
 
-  function buildPayload(model) {
-    var payload = {
-      "project-id": model.projectId
-    };
-
-    if (model.projectWebhookUrl) payload["project-webhook-url"] = model.projectWebhookUrl;
-    if (model.fromDomains.length) payload["from-domains"] = model.fromDomains;
-
-    if (model.createInbox) {
-      payload["create-inbox"] = true;
-      if (model.inboxId) payload["inbox-id"] = model.inboxId;
-      payload["inbox-webhook-url"] = model.inboxWebhookUrl;
-      if (model.inboxSecret) payload["inbox-secret"] = model.inboxSecret;
-    }
-
-    return payload;
-  }
-
-  function persistFallback(payload, idempotencyKey) {
-    var key = "linje_site_setups";
+  function persistFallback(payload) {
+    var key = "linje_site_signups";
     var existing = [];
     try {
       existing = JSON.parse(localStorage.getItem(key) || "[]");
@@ -128,35 +89,8 @@
     } catch (_) {
       existing = [];
     }
-    existing.push({
-      payload: payload,
-      idempotency_key: idempotencyKey,
-      created_at: new Date().toISOString()
-    });
+    existing.push(payload);
     localStorage.setItem(key, JSON.stringify(existing));
-  }
-
-  function shEscapeSingleQuoted(s) {
-    return String(s || "").replace(/'/g, "'\"'\"'");
-  }
-
-  function buildCurl(payload, idempotencyKey) {
-    var base = String(config.adminBaseUrl || "http://localhost:8080").replace(/\/+$/, "");
-    var json = JSON.stringify(payload);
-    return [
-      "curl -sS -X POST \"" + base + "/admin/setup\"",
-      "  -H \"Authorization: Bearer $LINJE_ADMIN_TOKEN\"",
-      "  -H \"Idempotency-Key: " + idempotencyKey + "\"",
-      "  -H \"Content-Type: application/json\"",
-      "  --data-raw '" + shEscapeSingleQuoted(json) + "'"
-    ].join(" \\\n");
-  }
-
-  function renderPreview(payload, idempotencyKey) {
-    var setupEl = document.querySelector("#setup-preview code");
-    var curlEl = document.querySelector("#curl-preview code");
-    if (setupEl) setupEl.textContent = JSON.stringify(payload, null, 2);
-    if (curlEl) curlEl.textContent = buildCurl(payload, idempotencyKey);
   }
 
   function attachRevealObserver() {
@@ -191,77 +125,77 @@
     });
   }
 
-  function attachSetupHandler() {
-    var form = document.getElementById("setup-form");
+  function attachFormHandler() {
+    var form = document.getElementById("signup-form");
     if (!form) return;
-
-    function refreshPreview() {
-      var model = readForm(form);
-      var payload = buildPayload(model);
-      var idempotencyKey = model.projectId
-        ? model.projectId + ":preview"
-        : "project-id:preview";
-      renderPreview(payload, idempotencyKey);
-    }
-
-    form.addEventListener("input", refreshPreview);
-    refreshPreview();
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       setStatus("", "");
 
-      var model = readForm(form);
-      var error = validate(model);
-      if (error) {
-        setStatus(error, "error");
-        sendAnalytics("setup_invalid", { reason: error });
+      var payload = readForm(form);
+      var validationError = validate(payload);
+      if (validationError) {
+        setStatus(validationError, "error");
+        sendAnalytics("account_signup_invalid", { reason: validationError });
         return;
       }
 
-      var payload = buildPayload(model);
       var query = getQueryParams();
-      var idempotencyKey = model.projectId + ":" + String(Date.now());
-      renderPreview(payload, idempotencyKey);
+      var capturedAtMs = Date.now();
+      var capturedAtIso = new Date(capturedAtMs).toISOString();
+      var body = Object.assign({}, payload, {
+        intent: "account-signup",
+        "use-case": payload.use_case,
+        source: config.source,
+        page: window.location.href,
+        page_url: window.location.href,
+        "page-url": window.location.href,
+        captured_at: capturedAtIso,
+        "captured-at": capturedAtMs,
+        utm_source: query.utm_source || "",
+        utm_medium: query.utm_medium || "",
+        utm_campaign: query.utm_campaign || "",
+        "utm-source": query.utm_source || "",
+        "utm-medium": query.utm_medium || "",
+        "utm-campaign": query.utm_campaign || "",
+        idempotency_key: payload.email + ":" + String(capturedAtMs)
+      });
 
       var button = form.querySelector("button[type='submit']");
       if (button) button.disabled = true;
-      setStatus("Submitting setup request...", "");
+      setStatus("Submitting...", "");
 
-      var request = config.setupEndpoint
-        ? fetch(config.setupEndpoint, {
+      var request = config.signupEndpoint
+        ? fetch(config.signupEndpoint, {
             method: "POST",
-            headers: {
-              "content-type": "application/json",
-              "idempotency-key": idempotencyKey,
-              "x-source": config.source
-            },
-            body: JSON.stringify(payload)
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(body)
           })
         : Promise.resolve({ ok: true, fallback: true });
 
       request
         .then(function (res) {
-          if (!res.ok) throw new Error("Setup endpoint returned " + res.status);
-          return res.fallback ? { fallback: true } : res.json().catch(function () { return {}; });
-        })
-        .then(function (resBody) {
-          if (resBody.fallback) {
-            persistFallback(payload, idempotencyKey);
-            setStatus("Setup payload generated and saved locally. Configure setupEndpoint to run live setup.", "ok");
-          } else {
-            setStatus("Setup submitted. Store returned api-token/webhook secrets securely.", "ok");
+          if (!res.ok) {
+            throw new Error("Signup endpoint returned " + res.status);
           }
 
-          sendAnalytics("setup_submitted", {
-            project_id: model.projectId,
-            create_inbox: model.createInbox,
-            utm_source: query.utm_source || ""
+          if (res.fallback) {
+            persistFallback(body);
+            setStatus("Saved locally (demo mode). Configure signupEndpoint to submit live signups.", "ok");
+          } else {
+            setStatus("Account signup received. Check your email for next steps.", "ok");
+          }
+
+          form.reset();
+          sendAnalytics("account_signup_submitted", {
+            volume: payload.volume,
+            company: payload.company
           });
         })
         .catch(function (err) {
-          setStatus("Setup failed. Review the generated cURL output or try again.", "error");
-          sendAnalytics("setup_failed", { error: String(err && err.message) });
+          setStatus("Submission failed. Please try again or email hello@linje.systems.", "error");
+          sendAnalytics("account_signup_failed", { error: String(err && err.message) });
         })
         .finally(function () {
           if (button) button.disabled = false;
@@ -271,5 +205,5 @@
 
   attachRevealObserver();
   attachCtaTracking();
-  attachSetupHandler();
+  attachFormHandler();
 })();
