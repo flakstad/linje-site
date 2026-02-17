@@ -1,12 +1,12 @@
 # linje-site
 
-Public landing + pilot signup site for Linje.
+Public landing + self-serve setup site for Linje.
 
 ## Goals
 
 - communicate the product boundary clearly: transactional outbound + inbound webhooks
-- convert qualified pilot leads via signup form
-- keep marketing/site concerns separate from core control-plane runtime
+- provide an API-first setup path for real product integrations
+- keep site concerns separate from core control-plane runtime
 
 ## Local preview
 
@@ -20,13 +20,14 @@ python3 -m http.server 8787
 
 Edit `site-config.js`:
 
-- `signupEndpoint`: server-side proxy endpoint that accepts JSON POST payloads
-- `analyticsEndpoint`: optional endpoint for conversion events
+- `setupEndpoint`: server-side proxy endpoint that accepts JSON POST payloads for setup
+- `adminBaseUrl`: shown in generated cURL snippets
+- `analyticsEndpoint`: optional endpoint for setup telemetry events
 
-Do not point `signupEndpoint` directly at Linje `/admin/*` from the browser.
+Do not point `setupEndpoint` directly at Linje `/admin/*` from the browser.
 The site is public, so admin credentials must stay server-side.
 
-When `signupEndpoint` is empty, form submissions are saved to `localStorage` in demo mode.
+When `setupEndpoint` is empty, generated setup payloads are saved to `localStorage` in demo mode.
 
 ## Deploy (GitHub Pages)
 
@@ -38,31 +39,18 @@ Expected settings in GitHub:
 2. Source: GitHub Actions.
 3. Push to `main` to deploy.
 
-## Lead payload shape
+## Setup payload shape
 
-Form sends JSON like:
+The form generates JSON for `POST /admin/setup` like:
 
 ```json
 {
-  "email": "you@company.com",
-  "company": "Acme Inc",
-  "name": "Jane Doe",
-  "volume": "10k-100k",
-  "use_case": "Password resets + receipts",
-  "use-case": "Password resets + receipts",
-  "consent": true,
-  "source": "linje-site",
-  "page": "https://linje.example/?utm_source=...",
-  "page-url": "https://linje.example/?utm_source=...",
-  "captured_at": "2026-02-17T12:34:56.000Z",
-  "captured-at": 1765802096000,
-  "utm_source": "...",
-  "utm-source": "...",
-  "utm_medium": "...",
-  "utm-medium": "...",
-  "utm_campaign": "...",
-  "utm-campaign": "...",
-  "idempotency_key": "you@company.com:1765802096000"
+  "project-id": "orders-api",
+  "project-webhook-url": "https://app.example.com/linje/events",
+  "from-domains": ["tx.example.com"],
+  "create-inbox": true,
+  "inbox-id": "support",
+  "inbox-webhook-url": "https://app.example.com/linje/inbound"
 }
 ```
 
@@ -70,16 +58,16 @@ Form sends JSON like:
 
 Recommended proxy behavior:
 
-1. Receive site payload over HTTPS.
-2. Normalize keys to Linje admin signup API payload.
-3. Forward to `POST /admin/signups` with `Authorization: Bearer <admin-token>`.
-4. Set `Idempotency-Key` from `idempotency_key` if present.
+1. Receive site setup payload over HTTPS.
+2. Optionally validate allowed fields before forwarding.
+3. Forward to `POST /admin/setup` with `Authorization: Bearer <admin-token>`.
+4. Pass through `Idempotency-Key` from the incoming request header if present.
 5. Return non-sensitive success/error to browser.
 
-See `examples/cloudflare-signup-proxy.js` for a minimal Worker example.
+See `examples/cloudflare-setup-proxy.js` for a minimal Worker example.
 
-## Handoff to onboarding
+## Operating notes
 
-- Route `signupEndpoint` to a durable sink (e.g., webhook service / CRM / DB)
-- Alert on failed endpoint calls
-- Review incoming signups daily and provision candidate projects in core Linje
+- Keep `LINJE_ADMIN_TOKEN` only in server-side secret storage.
+- Persist setup attempts in your proxy logs/audit sink for traceability.
+- Treat returned credentials (`api-token`, webhook secrets, inbox manage-token) as one-time secrets.
