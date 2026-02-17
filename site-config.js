@@ -1,5 +1,5 @@
 window.LinjeSiteConfig = {
-  // Example: "https://your-webhook-endpoint.example.com/linje-signups"
+  // Example: "https://site.example.com/api/signup" (server-side proxy to Linje /admin/signups).
   signupEndpoint: "",
   // Optional analytics collection endpoint.
   analyticsEndpoint: "",

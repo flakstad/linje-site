@@ -142,13 +142,23 @@
       }
 
       var query = getQueryParams();
+      var capturedAtMs = Date.now();
+      var capturedAtIso = new Date(capturedAtMs).toISOString();
       var body = Object.assign({}, payload, {
+        "use-case": payload.use_case,
         source: config.source,
         page: window.location.href,
-        captured_at: new Date().toISOString(),
+        page_url: window.location.href,
+        "page-url": window.location.href,
+        captured_at: capturedAtIso,
+        "captured-at": capturedAtMs,
         utm_source: query.utm_source || "",
         utm_medium: query.utm_medium || "",
-        utm_campaign: query.utm_campaign || ""
+        utm_campaign: query.utm_campaign || "",
+        "utm-source": query.utm_source || "",
+        "utm-medium": query.utm_medium || "",
+        "utm-campaign": query.utm_campaign || "",
+        idempotency_key: payload.email + ":" + String(capturedAtMs)
       });
 
       var button = form.querySelector("button[type='submit']");
