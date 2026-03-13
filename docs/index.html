@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Linje Docs</title>
+    <meta
+      name="description"
+      content="Linje API docs for transactional email, inbound email webhooks, projects, and admin operations."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="docs.css" />
+  </head>
+  <body class="docs-page">
+    <div class="signal-grid" aria-hidden="true"></div>
+
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="docs-topnav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="#reference">Reference</a>
+        <a href="../index.html#pricing">Pricing</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">Docs</p>
+        <a href="#overview">Overview</a>
+        <a href="#auth">Auth</a>
+        <a href="#send">Send email</a>
+        <a href="#inbound">Inbound email</a>
+        <a href="#signatures">Signatures</a>
+        <a href="#projects">Projects</a>
+        <a href="#events">Event webhooks</a>
+        <a href="#reference">Reference</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="overview" class="docs-hero" data-reveal>
+          <p class="eyebrow">API docs</p>
+          <h1>Send transactional email. Receive incoming email as webhooks.</h1>
+          <p class="subhead">
+            Linje handles email in both directions. Your app can send product email with a simple
+            API call, and inbound mail can come back into your application as a signed webhook.
+          </p>
+
+          <div class="docs-summary">
+            <div>
+              <span class="summary-label">Send mail</span>
+              <code>POST /v1/messages</code>
+            </div>
+            <div>
+              <span class="summary-label">Create inbox</span>
+              <code>POST /v1/inboxes</code>
+            </div>
+            <div>
+              <span class="summary-label">Admin contract</span>
+              <code>GET /admin/openapi.json</code>
+            </div>
+          </div>
+        </section>
+
+        <section id="auth" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Auth</p>
+            <h2>Three token scopes.</h2>
+          </div>
+
+          <div class="docs-table" role="table" aria-label="Authentication model">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Token</span>
+              <span role="columnheader">Use</span>
+              <span role="columnheader">Scope</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">Admin token</strong>
+              <span role="cell">Provision projects, domains, setup, admin APIs</span>
+              <span role="cell">Full control plane</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">Project token</strong>
+              <span role="cell">Send mail, manage project inboxes</span>
+              <span role="cell">One project</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">Inbox manage token</strong>
+              <span role="cell">Inspect or manage one inbox</span>
+              <span role="cell">One inbox</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="send" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Send email</p>
+            <h2>Use <code>POST /v1/messages</code> for transactional mail.</h2>
+          </div>
+
+          <p>
+            This is the core send endpoint. It is intended for receipts, magic links, password
+            resets, invites, and other product mail.
+          </p>
+
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "content-type: application/json" \
+  -H "idempotency-key: magic-link:user-123" \
+  -d '{
+    "from":"auth@tx.example.com",
+    "to":["you@example.com"],
+    "subject":"Your sign-in link",
+    "text":"Use the sign-in link in your app.",
+    "html":"&lt;p&gt;Use the sign-in link in your app.&lt;/p&gt;"
+  }' \
+  https://api.linje.systems/v1/messages</code></pre>
+
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Auth</strong>
+              <p>Use a project token for normal sending.</p>
+            </div>
+            <div class="note">
+              <strong>Idempotency</strong>
+              <p>Set an `idempotency-key` for safe retries.</p>
+            </div>
+            <div class="note">
+              <strong>From domains</strong>
+              <p>Project-token sends must use an allowed `from` domain.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="inbound" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Inbound email</p>
+            <h2>Use <code>POST /v1/inboxes</code> to turn email into webhooks.</h2>
+          </div>
+
+          <p>
+            You can provision a Linje inbox, point mail directly at it, or forward mail into it.
+            When Linje receives a message, it POSTs a structured JSON payload to your endpoint.
+          </p>
+
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "content-type: application/json" \
+  -d '{
+    "id":"support",
+    "webhook-url":"https://app.example.com/inbound"
+  }' \
+  https://api.linje.systems/v1/inboxes</code></pre>
+
+          <pre><code>POST https://app.example.com/inbound
+x-linje-inbound-id: ...
+x-linje-signature: sha256=...
+
+{
+  "event-id":"...",
+  "from":"user@example.com",
+  "to":"support@in.example.com",
+  "subject":"Need help",
+  "attachments":[...]
+}</code></pre>
+        </section>
+
+        <section id="signatures" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Signatures</p>
+            <h2>Webhook signatures use HMAC-SHA256 over timestamp + body.</h2>
+          </div>
+
+          <p>
+            Verify against the raw request body bytes, not re-serialized JSON. Linje sends
+            `x-linje-timestamp` and `x-linje-signature` on inbound and outbound webhooks.
+          </p>
+
+          <pre><code>expected = HMAC_SHA256(secret, timestamp + "." + raw_body)
+x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
+
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Inbound headers</strong>
+              <p>`x-linje-inbound-id`, `x-linje-delivery-id`, `x-linje-timestamp`, `x-linje-signature`</p>
+            </div>
+            <div class="note">
+              <strong>Delivery model</strong>
+              <p>Webhook delivery is at least once, so your endpoint should be idempotent.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="projects" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Projects and domains</p>
+            <h2>Projects give you scoped tokens and sender-domain rules.</h2>
+          </div>
+
+          <p>
+            Admins can provision projects and create sender domains. Project tokens are then safe
+            to use from your application for normal message sending.
+          </p>
+
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_API_TOKEN" \
+  -H "content-type: application/json" \
+  -d '{
+    "id":"acme",
+    "from-domains":["tx.acme.com"]
+  }' \
+  https://api.linje.systems/v1/projects/provision</code></pre>
+
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Create sender domains</strong>
+              <p>`POST /v1/domains` returns DNS records for verification.</p>
+            </div>
+            <div class="note">
+              <strong>Update limits</strong>
+              <p>`PATCH /v1/projects/:id` can update rate limits, daily limits, and webhooks.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="events" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Outbound event webhooks</p>
+            <h2>Projects can receive delivery lifecycle events too.</h2>
+          </div>
+
+          <p>
+            If a project has an outbound webhook configured, Linje can emit `message.accepted`,
+            `message.delivered`, `message.bounced`, and `message.dead` events.
+          </p>
+
+          <div class="docs-table" role="table" aria-label="Outbound event types">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Event</span>
+              <span role="columnheader">Meaning</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">message.accepted</strong>
+              <span role="cell">Linje handed the message off successfully.</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">message.delivered</strong>
+              <span role="cell">Remote MX accepted the message.</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">message.bounced</strong>
+              <span role="cell">A DSN bounce was ingested and correlated.</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">message.dead</strong>
+              <span role="cell">Linje stopped retrying delivery.</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="reference" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Reference</p>
+            <h2>Key endpoints.</h2>
+          </div>
+
+          <div class="docs-table" role="table" aria-label="Key API endpoints">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Method</span>
+              <span role="columnheader">Path</span>
+              <span role="columnheader">Purpose</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">POST</strong>
+              <code role="cell">/v1/messages</code>
+              <span role="cell">Send transactional email</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">GET</strong>
+              <code role="cell">/v1/messages/:id</code>
+              <span role="cell">Inspect one message</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">POST</strong>
+              <code role="cell">/v1/inboxes</code>
+              <span role="cell">Create or update an inbound inbox</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">GET</strong>
+              <code role="cell">/v1/inboxes</code>
+              <span role="cell">List inboxes</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">POST</strong>
+              <code role="cell">/v1/projects/provision</code>
+              <span role="cell">Provision a project and issue a project token</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">PATCH</strong>
+              <code role="cell">/v1/projects/:id</code>
+              <span role="cell">Update project settings and limits</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">POST</strong>
+              <code role="cell">/v1/domains</code>
+              <span role="cell">Create a sender domain and get DNS records</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">GET</strong>
+              <code role="cell">/admin/openapi.json</code>
+              <span role="cell">Machine-readable admin API contract</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">POST</strong>
+              <code role="cell">/admin/setup</code>
+              <span role="cell">Provision one integration from the admin API</span>
+            </div>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje docs</p>
+      <div>
+        <a href="../index.html">Home</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+
+    <script src="../app.js"></script>
+  </body>
+</html>

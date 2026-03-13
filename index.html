@@ -3,128 +3,185 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Linje | Transactional Outbound + Inbound Webhooks</title>
+    <title>Linje | Signal</title>
     <meta
       name="description"
-      content="Linje is an API-first email control-plane for transactional outbound and inbound webhook delivery. No ESP bloat."
+      content="Send transactional email from your app. Receive incoming email as webhooks."
     />
-    <meta property="og:title" content="Linje" />
+    <meta property="og:title" content="Linje | Signal" />
     <meta
       property="og:description"
-      content="Transactional outbound + inbound webhooks. API-first. Dashboard optional."
+      content="Send transactional email. Receive incoming email as webhooks."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://linje.example" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Public+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <div class="bg-orb orb-a" aria-hidden="true"></div>
-    <div class="bg-orb orb-b" aria-hidden="true"></div>
+  <body data-variant="signal">
+    <div class="signal-grid" aria-hidden="true"></div>
 
-    <header class="topbar">
-      <a class="brand" href="#home">Linje</a>
-      <nav>
-        <a href="#how">How It Works</a>
-        <a href="#scope">Product Boundary</a>
-        <a href="#signup" class="nav-cta" data-track="cta_nav_signup">Create Account</a>
-      </nav>
+    <header class="concept-bar">
+      <a class="brand" href="index.html">Linje</a>
+      <a class="top-link" href="docs/index.html">Docs</a>
     </header>
 
-    <main id="home">
-      <section class="hero" data-reveal>
-        <p class="eyebrow">API-First Email Control-Plane</p>
-        <h1>Transactional outbound + inbound webhooks. Nothing else.</h1>
+    <main class="signal-main">
+      <section class="signal-hero" data-reveal>
+        <p class="eyebrow">Simple email infrastructure</p>
+        <h1>Send transactional email. Turn incoming email into webhooks.</h1>
         <p class="subhead">
-          Linje is built for teams that need reliable email infrastructure without turning into an ESP.
-          Send operational emails, ingest inbound mail as signed webhooks, and run everything by API.
+          Use Linje to send transactional email from your app, receive inbound email as structured
+          webhooks, or handle both in one place.
         </p>
-        <div class="hero-cta">
-          <a href="#signup" class="button button-primary" data-track="cta_hero_signup">Create account</a>
-          <a href="#api" class="button button-ghost" data-track="cta_hero_api">See API model</a>
+        <div class="hero-meta" aria-label="Common use cases">
+          <span>HTTP to email</span>
+          <span>Email to HTTP</span>
+          <span>Receipts</span>
+          <span>Magic links</span>
+          <span>Password resets</span>
+          <span>Replies</span>
+          <span>Support inboxes</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#signup" class="button button-primary" data-track="cta_signal_signup">Request access</a>
+          <a href="docs/index.html" class="button button-ghost" data-track="cta_signal_docs">Read docs</a>
         </div>
       </section>
 
-      <section class="flow" aria-label="Message flow" data-reveal>
-        <div class="node">App</div>
-        <div class="line"><span></span></div>
-        <div class="node">Linje API</div>
-        <div class="line"><span></span></div>
-        <div class="node">SMTP / Provider</div>
-        <div class="line"><span></span></div>
-        <div class="node">Webhook Consumer</div>
+      <section id="flows" class="signal-rails" data-reveal>
+        <article class="rail-row">
+          <div class="rail-copy">
+            <p class="eyebrow">Outgoing</p>
+            <h2>Your app posts a message. Linje sends the email.</h2>
+            <p>
+              Use it for magic links, receipts, password resets, invites, and other product mail.
+            </p>
+          </div>
+
+          <div class="rail-diagram" aria-label="Outgoing flow">
+            <div class="rail-chain">
+              <span class="rail-stop">Your app</span>
+              <span class="rail-stop">Linje</span>
+              <span class="rail-stop">Recipient inbox</span>
+            </div>
+          </div>
+
+          <pre><code>POST /v1/messages
+{
+  "from": "auth@tx.example.com",
+  "to": ["you@example.com"],
+  "subject": "Your sign-in link"
+}</code></pre>
+        </article>
+
+        <article class="rail-row rail-row-inbound">
+          <div class="rail-copy">
+            <p class="eyebrow">Incoming</p>
+            <h2>An email arrives. Your app gets a webhook.</h2>
+            <p>
+              Use a Linje inbox directly or forward mail into one. Linje sends your endpoint a
+              signed, structured payload.
+            </p>
+          </div>
+
+          <div class="rail-diagram" aria-label="Incoming flow">
+            <div class="rail-chain rail-chain-inbound">
+              <span class="rail-stop">Mail</span>
+              <span class="rail-stop">Linje inbox</span>
+              <span class="rail-stop">Your endpoint</span>
+            </div>
+          </div>
+
+          <pre><code>POST /v1/inboxes
+
+POST https://app.example.com/inbound
+{
+  "from": "user@example.com",
+  "subject": "Reply",
+  "attachments": [...]
+}</code></pre>
+        </article>
       </section>
 
-      <section id="how" class="panel" data-reveal>
-        <h2>How it works</h2>
-        <div class="steps">
-          <article>
-            <h3>1. Send transactional email</h3>
-            <p>POST messages with project-scoped tokens and strict sender-domain enforcement.</p>
-          </article>
-          <article>
-            <h3>2. Receive inbound as events</h3>
-            <p>Provision inboxes and receive signed webhook payloads, attachments included via signed URLs.</p>
-          </article>
-          <article>
-            <h3>3. Operate via control-plane API</h3>
-            <p>Guardrails, telemetry, cleanup, and security actions available under admin API routes.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="api" class="panel two-col" data-reveal>
-        <div>
-          <h2>Strong API story</h2>
+      <section class="signal-details" data-reveal>
+        <div class="detail-intro">
+          <p class="eyebrow">Why teams pick it</p>
+          <h2>One small service with a clear job.</h2>
           <p>
-            If it exists in the product, it should be available through API. Dashboard is optional.
+            Linje keeps email close to the rest of your application instead of becoming a separate
+            system your team has to think about all day.
           </p>
-          <ul>
-            <li>Project-scoped and admin-scoped auth</li>
-            <li>Idempotency support for mutating admin control-plane endpoints</li>
-            <li>Machine-readable OpenAPI contract for admin routes</li>
-          </ul>
         </div>
-        <pre><code>POST /v1/messages
-POST /v1/inboxes
-POST /v1/inbound
-GET  /admin/openapi.json
-GET  /admin/security/status</code></pre>
-      </section>
 
-      <section id="scope" class="panel" data-reveal>
-        <h2>What Linje is not</h2>
-        <div class="scope-grid">
-          <div>
-            <h3>Included</h3>
-            <ul>
-              <li>Transactional outbound email</li>
-              <li>Inbound webhooks with retries</li>
-              <li>Operational control-plane APIs</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Explicitly excluded</h3>
-            <ul>
-              <li>Campaigns and list management</li>
-              <li>Template editors and marketing automation</li>
-              <li>Open/click analytics suite</li>
-            </ul>
-          </div>
+        <div class="detail-list">
+          <article class="detail-item">
+            <h3>HTTP out</h3>
+            <p>Send product mail with one API call.</p>
+          </article>
+          <article class="detail-item">
+            <h3>Email back in</h3>
+            <p>Inbound mail becomes a webhook your app can use.</p>
+          </article>
+          <article class="detail-item">
+            <h3>Simple to operate</h3>
+            <p>Useful tools when you need them. Simple API at the center.</p>
+          </article>
         </div>
       </section>
 
-      <section id="signup" class="panel signup" data-reveal>
-        <h2>Create your Linje account</h2>
-        <p>
-          Sign up to get access to the logged-in API and admin system.
-        </p>
-        <form id="signup-form" novalidate>
+      <section class="pricing-section" data-reveal>
+        <div class="pricing-copy">
+          <p class="eyebrow">Pricing</p>
+          <h2>Simple usage pricing.</h2>
+          <p>
+            Pricing is based on messages processed each month.
+          </p>
+          <p class="pricing-note">
+            One outbound email is one message. One inbound email delivered to your webhook is one
+            message.
+          </p>
+        </div>
+
+        <div class="pricing-table" aria-label="Pricing plans">
+          <div class="pricing-row pricing-head">
+            <span>Plan</span>
+            <span>Monthly usage</span>
+            <span>Price</span>
+          </div>
+          <div class="pricing-row">
+            <strong>Starter</strong>
+            <span>500 messages / month</span>
+            <span>Free</span>
+          </div>
+          <div class="pricing-row">
+            <strong>Growth</strong>
+            <span>5,000 messages / month</span>
+            <span>$5 / month</span>
+          </div>
+          <div class="pricing-row">
+            <strong>Scale</strong>
+            <span>50,000 messages / month</span>
+            <span>$25 / month</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="signup" class="signup-section" data-reveal>
+        <div class="signup-copy">
+          <p class="eyebrow">Request access</p>
+          <h2>Tell us what your app needs.</h2>
+          <p>
+            We only need enough context to provision access to the logged-in Linje system.
+          </p>
+        </div>
+
+        <form id="signup-form" class="signup-form" novalidate data-variant="signal">
           <div class="form-grid">
             <label>
               Work email
@@ -149,23 +206,38 @@ GET  /admin/security/status</code></pre>
               </select>
             </label>
           </div>
+
           <label>
             Primary use case
-            <textarea name="use_case" rows="4" required placeholder="Password reset, receipts, inbound support replies..."></textarea>
+            <textarea
+              name="use_case"
+              rows="4"
+              required
+              placeholder="Password resets, receipts, inbound support replies, mailbox-to-webhook flows..."
+            ></textarea>
           </label>
+
           <label class="consent">
             <input type="checkbox" name="consent" required />
             I agree Linje can contact me to complete account setup.
           </label>
-          <button class="button button-primary" type="submit" data-track="cta_form_submit">Create account</button>
-          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+
+          <div class="form-actions">
+            <button class="button button-primary" type="submit" data-track="cta_signal_form_submit">
+              Request access
+            </button>
+            <p id="form-status" class="form-status" data-form-status role="status" aria-live="polite"></p>
+          </div>
         </form>
       </section>
     </main>
 
-    <footer>
-      <p>Linje. API-first control-plane for transactional email.</p>
-      <p><a href="privacy.html">Privacy</a></p>
+    <footer class="site-footer">
+      <p>Linje</p>
+      <div>
+        <a href="docs/index.html">Docs</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
     </footer>
 
     <script src="site-config.js"></script>

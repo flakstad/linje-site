@@ -1,0 +1,478 @@
+:root {
+  --paper: #fff0cf;
+  --paper-2: #fff7e7;
+  --ink: #111111;
+  --muted: #4e4a43;
+  --line: rgba(17, 17, 17, 0.14);
+  --orange: #ff6a3d;
+  --blue: #1d67ff;
+  --green: #1f9c63;
+  --yellow: #ffd02f;
+  --danger: #b73020;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(255, 208, 47, 0.26), transparent 26rem),
+    linear-gradient(180deg, #ffe7b8 0%, #fff2d8 100%);
+  color: var(--ink);
+  font-family: "Instrument Sans", sans-serif;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+}
+
+.poster-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, transparent 0 14%, rgba(255, 106, 61, 0.08) 14% 16%, transparent 16% 100%),
+    linear-gradient(45deg, transparent 0 76%, rgba(29, 103, 255, 0.08) 76% 78%, transparent 78% 100%);
+}
+
+.poster-bar,
+.poster-main,
+.poster-footer {
+  width: min(1220px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.poster-bar {
+  padding: 1.2rem 0 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.poster-brand {
+  max-width: 30rem;
+}
+
+.poster-brand a {
+  font-family: "Archivo Black", sans-serif;
+  font-size: 2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.poster-brand p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.poster-nav,
+.poster-footer div,
+.ticket-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.poster-nav a {
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--muted);
+}
+
+.poster-nav .is-active {
+  color: var(--ink);
+  border-color: rgba(17, 17, 17, 0.3);
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.poster-main {
+  padding: 2rem 0 4rem;
+  display: grid;
+  gap: 1.4rem;
+}
+
+.poster-stage {
+  min-height: calc(100vh - 8rem);
+  padding: 1.2rem 0 0;
+  display: grid;
+  align-content: start;
+  gap: 1.2rem;
+  position: relative;
+}
+
+.poster-kicker {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--orange);
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: "Archivo Black", sans-serif;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 8ch;
+  font-size: clamp(4rem, 14vw, 10rem);
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.poster-intro,
+.badge p,
+.bottom-copy li,
+.bottom-side li,
+.poster-footer,
+.ticket-consent,
+.ticket-header p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.poster-intro {
+  max-width: 34rem;
+  font-size: 1.12rem;
+}
+
+.poster-badges {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+  gap: 1.4rem;
+  align-items: start;
+}
+
+.badge {
+  min-height: 25rem;
+  padding: 1.4rem;
+  border: 3px solid var(--ink);
+  border-radius: 48px;
+  background: var(--paper-2);
+  box-shadow: 0 16px 0 rgba(17, 17, 17, 0.12);
+  position: relative;
+}
+
+.badge-send {
+  transform: rotate(-3deg);
+}
+
+.badge-inbound {
+  transform: translateY(4rem) rotate(2deg);
+}
+
+.badge-no {
+  width: 4.2rem;
+  height: 4.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1rem;
+  background: var(--yellow);
+}
+
+.badge h2 {
+  margin-top: 1rem;
+  max-width: 9ch;
+}
+
+.badge p {
+  max-width: 24rem;
+  margin-top: 0.7rem;
+  font-size: 1.02rem;
+}
+
+.badge code {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.64);
+}
+
+.poster-runner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border: 3px solid var(--ink);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.poster-runner div {
+  padding: 1rem;
+  background: var(--paper-2);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.poster-boards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.board {
+  padding: 1.2rem;
+  border: 3px solid var(--ink);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.board-send {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.board-inbound {
+  background: rgba(29, 103, 255, 0.08);
+}
+
+.board h2 {
+  margin: 0.75rem 0 0.9rem;
+}
+
+pre {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 24px;
+  overflow: auto;
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  background: rgba(17, 17, 17, 0.94);
+  color: #fff7dd;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.86rem;
+}
+
+.poster-bottom {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+}
+
+.bottom-copy,
+.bottom-side {
+  padding: 1.15rem;
+  border: 3px solid var(--ink);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.bottom-copy h2,
+.bottom-side h2 {
+  margin: 0.75rem 0 0.8rem;
+}
+
+.bottom-copy ul,
+.bottom-side ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.bottom-copy li + li,
+.bottom-side li + li {
+  margin-top: 0.45rem;
+}
+
+.poster-ticket {
+  padding: 1.2rem;
+  border: 3px solid var(--ink);
+  border-radius: 36px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.76), rgba(255, 240, 207, 0.94));
+}
+
+.ticket-header h2 {
+  margin-top: 0.7rem;
+  max-width: 12ch;
+}
+
+.ticket-form {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.ticket-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.ticket-text {
+  display: grid;
+  gap: 0.35rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 2px solid rgba(17, 17, 17, 0.16);
+  border-radius: 18px;
+  padding: 0.85rem 0.9rem;
+  font: inherit;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ink);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 7rem;
+}
+
+.ticket-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.ticket-consent input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.16rem;
+}
+
+.ticket-submit {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: end;
+}
+
+.poster-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.poster-button-primary {
+  background: var(--ink);
+  color: var(--paper-2);
+}
+
+.form-status {
+  min-height: 1.2rem;
+  margin: 0;
+}
+
+.form-status.error {
+  color: var(--danger);
+}
+
+.form-status.ok {
+  color: var(--green);
+}
+
+.poster-footer {
+  padding: 0 0 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.poster-footer a {
+  text-decoration: none;
+}
+
+.poster-footer a:hover,
+.poster-nav a:hover {
+  color: var(--orange);
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 480ms ease, transform 480ms ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 1000px) {
+  .poster-bar,
+  .poster-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .poster-badges,
+  .poster-boards,
+  .poster-bottom,
+  .ticket-row {
+    grid-template-columns: 1fr;
+  }
+
+  .badge-inbound {
+    transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .poster-main {
+    padding-top: 1.6rem;
+  }
+
+  .poster-runner {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ticket-submit {
+    justify-items: start;
+  }
+}

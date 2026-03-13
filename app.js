@@ -10,6 +10,9 @@
     window.LinjeSiteConfig || {}
   );
 
+  var pageVariant =
+    (document.body && document.body.getAttribute("data-variant")) || "default";
+
   function getQueryParams() {
     var out = {};
     var params = new URLSearchParams(window.location.search);
@@ -25,14 +28,16 @@
   }
 
   function sendAnalytics(eventName, payload) {
-    pushDataLayer(eventName, payload);
+    var data = Object.assign({ variant: pageVariant }, payload || {});
+    pushDataLayer(eventName, data);
+
     if (!config.analyticsEndpoint) {
       return;
     }
 
     var body = JSON.stringify({
       event: eventName,
-      payload: payload || {},
+      payload: data,
       ts: new Date().toISOString(),
       source: config.source
     });
@@ -50,8 +55,12 @@
     }).catch(function () {});
   }
 
-  function setStatus(text, klass) {
-    var el = document.getElementById("form-status");
+  function statusNode(form) {
+    return form ? form.querySelector("[data-form-status]") : null;
+  }
+
+  function setStatus(form, text, klass) {
+    var el = statusNode(form);
     if (!el) return;
     el.textContent = text || "";
     el.className = "form-status" + (klass ? " " + klass : "");
@@ -65,7 +74,8 @@
       name: String(fd.get("name") || "").trim(),
       volume: String(fd.get("volume") || "").trim(),
       use_case: String(fd.get("use_case") || "").trim(),
-      consent: !!fd.get("consent")
+      consent: !!fd.get("consent"),
+      variant: form.getAttribute("data-variant") || pageVariant
     };
   }
 
@@ -109,8 +119,8 @@
       { threshold: 0.12 }
     );
 
-    nodes.forEach(function (n) {
-      observer.observe(n);
+    nodes.forEach(function (node) {
+      observer.observe(node);
     });
   }
 
@@ -131,13 +141,16 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      setStatus("", "");
+      setStatus(form, "", "");
 
       var payload = readForm(form);
       var validationError = validate(payload);
       if (validationError) {
-        setStatus(validationError, "error");
-        sendAnalytics("account_signup_invalid", { reason: validationError });
+        setStatus(form, validationError, "error");
+        sendAnalytics("account_signup_invalid", {
+          reason: validationError,
+          variant: payload.variant
+        });
         return;
       }
 
@@ -163,8 +176,11 @@
       });
 
       var button = form.querySelector("button[type='submit']");
-      if (button) button.disabled = true;
-      setStatus("Submitting...", "");
+      if (button) {
+        button.disabled = true;
+        button.setAttribute("aria-busy", "true");
+      }
+      setStatus(form, "Submitting...", "");
 
       var request = config.signupEndpoint
         ? fetch(config.signupEndpoint, {
@@ -182,23 +198,38 @@
 
           if (res.fallback) {
             persistFallback(body);
-            setStatus("Saved locally (demo mode). Configure signupEndpoint to submit live signups.", "ok");
+            setStatus(
+              form,
+              "Saved locally (demo mode). Configure signupEndpoint to submit live signups.",
+              "ok"
+            );
           } else {
-            setStatus("Account signup received. Check your email for next steps.", "ok");
+            setStatus(form, "Account signup received. Check your email for next steps.", "ok");
           }
 
           form.reset();
           sendAnalytics("account_signup_submitted", {
             volume: payload.volume,
-            company: payload.company
+            company: payload.company,
+            variant: payload.variant
           });
         })
         .catch(function (err) {
-          setStatus("Submission failed. Please try again or email hello@linje.systems.", "error");
-          sendAnalytics("account_signup_failed", { error: String(err && err.message) });
+          setStatus(
+            form,
+            "Submission failed. Please try again or email hello@linje.systems.",
+            "error"
+          );
+          sendAnalytics("account_signup_failed", {
+            error: String(err && err.message),
+            variant: payload.variant
+          });
         })
         .finally(function () {
-          if (button) button.disabled = false;
+          if (button) {
+            button.disabled = false;
+            button.removeAttribute("aria-busy");
+          }
         });
     });
   }
