@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Linje | Poster</title>
+    <meta
+      name="description"
+      content="Concept 02 for Linje: a poster-style landing page built around two simple promises: send transactional email and turn incoming email into webhook events."
+    />
+    <meta property="og:title" content="Linje | Poster" />
+    <meta
+      property="og:description"
+      content="Two checks. Send transactional email. Turn incoming email into webhook events. Concept 02."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.example/route/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="route.css" />
+  </head>
+  <body data-variant="poster">
+    <div class="poster-lines" aria-hidden="true"></div>
+
+    <header class="poster-bar">
+      <div class="poster-brand">
+        <a href="../index.html">Linje</a>
+        <p>Same product, louder format. Still just two lines of business.</p>
+      </div>
+      <nav class="poster-nav" aria-label="Concept variants">
+        <a href="../index.html">01 Signal</a>
+        <a class="is-active" aria-current="page" href="index.html">02 Poster</a>
+        <a href="../thread/index.html">03 Manual</a>
+      </nav>
+    </header>
+
+    <main class="poster-main">
+      <section class="poster-stage" data-reveal>
+        <p class="poster-kicker">Concept 02 / Poster</p>
+        <h1>Two checks and you are done.</h1>
+        <p class="poster-intro">
+          Linje is small on purpose. It sends transactional email. It turns incoming email into
+          webhook events.
+        </p>
+
+        <div class="poster-badges">
+          <article class="badge badge-send">
+            <span class="badge-no">01</span>
+            <h2>Send transactional email</h2>
+            <p>POST a message. Let Linje handle queueing, retries, and delivery handoff.</p>
+            <code>POST /v1/messages</code>
+          </article>
+
+          <article class="badge badge-inbound">
+            <span class="badge-no">02</span>
+            <h2>Incoming email becomes a webhook</h2>
+            <p>Create inboxes. Receive signed events when mail comes in.</p>
+            <code>POST /v1/inboxes</code>
+          </article>
+        </div>
+      </section>
+
+      <section class="poster-runner" data-reveal>
+        <div>no campaigns</div>
+        <div>no list management</div>
+        <div>no template builder</div>
+        <div>no click tracking</div>
+      </section>
+
+      <section class="poster-boards" data-reveal>
+        <article class="board board-send">
+          <p class="poster-kicker">Outgoing</p>
+          <h2>What a send looks like</h2>
+          <pre><code>{
+  "project": "app",
+  "from": "no-reply@tx.example.com",
+  "to": ["you@example.com"],
+  "subject": "Receipt"
+}</code></pre>
+        </article>
+
+        <article class="board board-inbound">
+          <p class="poster-kicker">Incoming</p>
+          <h2>What a webhook looks like</h2>
+          <pre><code>{
+  "from": "user@example.com",
+  "to": "support@in.example.com",
+  "subject": "Need help",
+  "attachments": [...]
+}</code></pre>
+        </article>
+      </section>
+
+      <section class="poster-bottom" data-reveal>
+        <article class="bottom-copy">
+          <p class="poster-kicker">Simple by design</p>
+          <h2>The small surface area is the selling point.</h2>
+          <ul>
+            <li>Easy to explain internally</li>
+            <li>Easy to integrate from code</li>
+            <li>Easy to keep out of ESP creep</li>
+          </ul>
+        </article>
+
+        <article class="bottom-side">
+          <p class="poster-kicker">Secondary surfaces</p>
+          <ul>
+            <li>Portal for project owners</li>
+            <li>Admin console for operators</li>
+            <li>API remains the source of truth</li>
+          </ul>
+        </article>
+      </section>
+
+      <section id="signup" class="poster-ticket" data-reveal>
+        <div class="ticket-header">
+          <p class="poster-kicker">Request access</p>
+          <h2>Tell us your send volume and use case.</h2>
+        </div>
+
+        <form id="signup-form" class="ticket-form" novalidate data-variant="poster">
+          <div class="ticket-row">
+            <label>
+              Work email
+              <input type="email" name="email" required placeholder="you@company.com" />
+            </label>
+            <label>
+              Company
+              <input type="text" name="company" required placeholder="Acme Inc" />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required placeholder="Jane Doe" />
+            </label>
+            <label>
+              Monthly transactional volume
+              <select name="volume" required>
+                <option value="">Select</option>
+                <option value="<10k">&lt;10k</option>
+                <option value="10k-100k">10k-100k</option>
+                <option value="100k-1m">100k-1m</option>
+                <option value=">1m">&gt;1m</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="ticket-text">
+            Primary use case
+            <textarea
+              name="use_case"
+              rows="3"
+              required
+              placeholder="Receipts, password resets, inbound support replies, mailbox processing..."
+            ></textarea>
+          </label>
+
+          <div class="ticket-actions">
+            <label class="ticket-consent">
+              <input type="checkbox" name="consent" required />
+              I agree Linje can contact me to complete account setup.
+            </label>
+
+            <div class="ticket-submit">
+              <button class="poster-button poster-button-primary" type="submit" data-track="cta_poster_form_submit">
+                Request access
+              </button>
+              <p id="form-status" class="form-status" data-form-status role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="poster-footer">
+      <p>Concept 02: same message, much louder layout.</p>
+      <div>
+        <a href="../index.html">Concept 01</a>
+        <a href="../thread/index.html">Concept 03</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+
+    <script src="../site-config.js"></script>
+    <script src="../app.js"></script>
+  </body>
+</html>

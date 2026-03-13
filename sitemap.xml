@@ -6,4 +6,7 @@
   <url>
     <loc>https://linje.example/privacy.html</loc>
   </url>
+  <url>
+    <loc>https://linje.example/docs/</loc>
+  </url>
 </urlset>
