@@ -381,9 +381,25 @@ pre {
   margin: 0.65rem 0;
 }
 
-.signup-form {
+.signup-closed-card {
   display: grid;
-  gap: 0;
+  gap: 1rem;
+  padding: 1.2rem 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.signup-closed-title {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.signup-closed-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
 }
 
 .form-grid {

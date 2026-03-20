@@ -118,60 +118,27 @@
 
       <section id="signup" class="poster-ticket" data-reveal>
         <div class="ticket-header">
-          <p class="poster-kicker">Request access</p>
-          <h2>Tell us your send volume and use case.</h2>
+          <p class="poster-kicker">Contact</p>
+          <h2>Public signup is currently closed.</h2>
         </div>
 
-        <form id="signup-form" class="ticket-form" novalidate data-variant="poster">
-          <div class="ticket-row">
-            <label>
-              Work email
-              <input type="email" name="email" required placeholder="you@company.com" />
-            </label>
-            <label>
-              Company
-              <input type="text" name="company" required placeholder="Acme Inc" />
-            </label>
-            <label>
-              Name
-              <input type="text" name="name" required placeholder="Jane Doe" />
-            </label>
-            <label>
-              Monthly transactional volume
-              <select name="volume" required>
-                <option value="">Select</option>
-                <option value="<10k">&lt;10k</option>
-                <option value="10k-100k">10k-100k</option>
-                <option value="100k-1m">100k-1m</option>
-                <option value=">1m">&gt;1m</option>
-              </select>
-            </label>
+        <div class="ticket-closed">
+          <p>
+            Linje is onboarding access directly right now. Email your company name, expected
+            message volume, and whether you need outbound email, inbound email, or both.
+          </p>
+          <div class="ticket-closed-actions">
+            <a
+              class="poster-button poster-button-primary"
+              href="mailto:hello@linje.systems?subject=Linje%20access"
+              data-track="cta_poster_email"
+              >Email hello@linje.systems</a
+            >
+            <a class="poster-button poster-button-secondary" href="../docs/index.html" data-track="cta_poster_docs"
+              >Read docs</a
+            >
           </div>
-
-          <label class="ticket-text">
-            Primary use case
-            <textarea
-              name="use_case"
-              rows="3"
-              required
-              placeholder="Receipts, password resets, inbound support replies, mailbox processing..."
-            ></textarea>
-          </label>
-
-          <div class="ticket-actions">
-            <label class="ticket-consent">
-              <input type="checkbox" name="consent" required />
-              I agree Linje can contact me to complete account setup.
-            </label>
-
-            <div class="ticket-submit">
-              <button class="poster-button poster-button-primary" type="submit" data-track="cta_poster_form_submit">
-                Request access
-              </button>
-              <p id="form-status" class="form-status" data-form-status role="status" aria-live="polite"></p>
-            </div>
-          </div>
-        </form>
+        </div>
       </section>
     </main>
 

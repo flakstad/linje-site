@@ -49,7 +49,7 @@
           <span>Support inboxes</span>
         </div>
         <div class="hero-actions">
-          <a href="#signup" class="button button-primary" data-track="cta_signal_signup">Request access</a>
+          <a href="#signup" class="button button-primary" data-track="cta_signal_contact">Contact</a>
           <a href="docs/index.html" class="button button-ghost" data-track="cta_signal_docs">Read docs</a>
         </div>
       </section>
@@ -174,61 +174,32 @@ POST https://app.example.com/inbound
 
       <section id="signup" class="signup-section" data-reveal>
         <div class="signup-copy">
-          <p class="eyebrow">Request access</p>
-          <h2>Tell us what your app needs.</h2>
+          <p class="eyebrow">Contact</p>
+          <h2>Public signup is currently closed.</h2>
           <p>
-            We only need enough context to provision access to the logged-in Linje system.
+            Linje is onboarding access directly right now. Email a short note about your app, your
+            expected volume, and whether you need outbound email, inbound email, or both.
           </p>
         </div>
 
-        <form id="signup-form" class="signup-form" novalidate data-variant="signal">
-          <div class="form-grid">
-            <label>
-              Work email
-              <input type="email" name="email" required placeholder="you@company.com" />
-            </label>
-            <label>
-              Company
-              <input type="text" name="company" required placeholder="Acme Inc" />
-            </label>
-            <label>
-              Name
-              <input type="text" name="name" required placeholder="Jane Doe" />
-            </label>
-            <label>
-              Monthly transactional volume
-              <select name="volume" required>
-                <option value="">Select</option>
-                <option value="<10k">&lt;10k</option>
-                <option value="10k-100k">10k-100k</option>
-                <option value="100k-1m">100k-1m</option>
-                <option value=">1m">&gt;1m</option>
-              </select>
-            </label>
+        <div class="signup-closed-card">
+          <p class="signup-closed-title">Best next step</p>
+          <p>
+            Include your company name, rough message volume, and the use case you want to launch
+            first. We will reply directly if Linje is a fit.
+          </p>
+          <div class="signup-closed-actions">
+            <a
+              href="mailto:hello@linje.systems?subject=Linje%20access"
+              class="button button-primary"
+              data-track="cta_signal_email"
+              >Email hello@linje.systems</a
+            >
+            <a href="docs/index.html" class="button button-ghost" data-track="cta_signal_docs_closed"
+              >Read docs first</a
+            >
           </div>
-
-          <label>
-            Primary use case
-            <textarea
-              name="use_case"
-              rows="4"
-              required
-              placeholder="Password resets, receipts, inbound support replies, mailbox-to-webhook flows..."
-            ></textarea>
-          </label>
-
-          <label class="consent">
-            <input type="checkbox" name="consent" required />
-            I agree Linje can contact me to complete account setup.
-          </label>
-
-          <div class="form-actions">
-            <button class="button button-primary" type="submit" data-track="cta_signal_form_submit">
-              Request access
-            </button>
-            <p id="form-status" class="form-status" data-form-status role="status" aria-live="polite"></p>
-          </div>
-        </form>
+        </div>
       </section>
     </main>
 
