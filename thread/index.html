@@ -43,7 +43,7 @@
         <a href="#two-jobs">Two Jobs</a>
         <a href="#requests">Requests</a>
         <a href="#boundary">Boundary</a>
-        <a href="#signup">Request Access</a>
+        <a href="#signup">Contact</a>
       </aside>
 
       <article class="manual-doc">
@@ -126,52 +126,23 @@
       </article>
 
       <aside class="manual-rail">
-        <div class="rail-card" data-reveal>
-          <p class="manual-kicker">Request access</p>
-          <h2>Try Linje</h2>
-          <p>Give us the basics and we will use that to provision access.</p>
+        <div id="signup" class="rail-card" data-reveal>
+          <p class="manual-kicker">Contact</p>
+          <h2>Public signup is currently closed.</h2>
+          <p>
+            Linje is onboarding access directly right now. Email your company, expected message
+            volume, and whether you need outbound email, inbound email, or both.
+          </p>
 
-          <form id="signup-form" class="rail-form" novalidate data-variant="manual">
-            <label>
-              Work email
-              <input type="email" name="email" required placeholder="you@company.com" />
-            </label>
-            <label>
-              Company
-              <input type="text" name="company" required placeholder="Acme Inc" />
-            </label>
-            <label>
-              Name
-              <input type="text" name="name" required placeholder="Jane Doe" />
-            </label>
-            <label>
-              Monthly transactional volume
-              <select name="volume" required>
-                <option value="">Select</option>
-                <option value="<10k">&lt;10k</option>
-                <option value="10k-100k">10k-100k</option>
-                <option value="100k-1m">100k-1m</option>
-                <option value=">1m">&gt;1m</option>
-              </select>
-            </label>
-            <label>
-              Primary use case
-              <textarea
-                name="use_case"
-                rows="4"
-                required
-                placeholder="Receipts, inbound support replies, operational email..."
-              ></textarea>
-            </label>
-            <label class="rail-consent">
-              <input type="checkbox" name="consent" required />
-              I agree Linje can contact me to complete account setup.
-            </label>
-            <button class="manual-button" type="submit" data-track="cta_manual_form_submit">
-              Request access
-            </button>
-            <p id="form-status" class="form-status" data-form-status role="status" aria-live="polite"></p>
-          </form>
+          <div class="rail-closed">
+            <a
+              class="manual-button"
+              href="mailto:hello@linje.systems?subject=Linje%20access"
+              data-track="cta_manual_email"
+              >Email hello@linje.systems</a
+            >
+            <a class="manual-link" href="../docs/index.html" data-track="cta_manual_docs">Read docs</a>
+          </div>
         </div>
 
         <div class="rail-note" data-reveal>
