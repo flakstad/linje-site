@@ -6,7 +6,7 @@
     <title>Linje Docs</title>
     <meta
       name="description"
-      content="Linje API docs for transactional email, inbound email webhooks, projects, and admin operations."
+      content="Linje API docs for transactional email, inbound email webhooks, project setup, and operational inspection."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -61,8 +61,8 @@
               <code>POST /v1/inboxes</code>
             </div>
             <div>
-              <span class="summary-label">Admin contract</span>
-              <code>GET /admin/openapi.json</code>
+              <span class="summary-label">Portal setup</span>
+              <code>Portal -&gt; Settings</code>
             </div>
           </div>
         </section>
@@ -70,23 +70,23 @@
         <section id="auth" class="docs-section" data-reveal>
           <div class="section-heading">
             <p class="eyebrow">Auth</p>
-            <h2>Three token scopes.</h2>
+            <h2>Portal access plus two scoped credentials.</h2>
           </div>
 
           <div class="docs-table" role="table" aria-label="Authentication model">
             <div class="docs-row docs-head" role="row">
-              <span role="columnheader">Token</span>
+              <span role="columnheader">Credential</span>
               <span role="columnheader">Use</span>
               <span role="columnheader">Scope</span>
             </div>
             <div class="docs-row" role="row">
-              <strong role="cell">Admin token</strong>
-              <span role="cell">Provision projects, domains, setup, admin APIs</span>
-              <span role="cell">Full control plane</span>
+              <strong role="cell">Portal session</strong>
+              <span role="cell">Claim sender domains, rotate tokens, configure webhooks, inspect traffic</span>
+              <span role="cell">One account in the UI</span>
             </div>
             <div class="docs-row" role="row">
               <strong role="cell">Project token</strong>
-              <span role="cell">Send mail, manage project inboxes</span>
+              <span role="cell">Send mail, inspect messages/events, manage project inboxes</span>
               <span role="cell">One project</span>
             </div>
             <div class="docs-row" role="row">
@@ -203,27 +203,31 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
           </div>
 
           <p>
-            Admins can provision projects and create sender domains. Project tokens are then safe
-            to use from your application for normal message sending.
+            Project owners do setup in the portal. Claim sender domains there, publish the DNS
+            records Linje gives you, then attach verified domains and copy the project token for
+            runtime use in your application.
           </p>
 
-          <pre><code>curl -fsS \
-  -H "Authorization: Bearer $LINJE_API_TOKEN" \
-  -H "content-type: application/json" \
-  -d '{
-    "id":"acme",
-    "from-domains":["tx.acme.com"]
-  }' \
-  https://api.linje.systems/v1/projects/provision</code></pre>
+          <pre><code>Portal -&gt; Settings
+
+1. Create your first project
+2. Claim a sender domain
+3. Publish the DNS records
+4. Wait for verification, then attach the domain
+5. Copy the project token and webhook secret</code></pre>
 
           <div class="inline-notes">
             <div class="note">
-              <strong>Create sender domains</strong>
-              <p>`POST /v1/domains` returns DNS records for verification.</p>
+              <strong>Project token</strong>
+              <p>Use it for `POST /v1/messages`, `GET /v1/messages`, `GET /v1/events`, and `POST /v1/inboxes`.</p>
             </div>
             <div class="note">
-              <strong>Update limits</strong>
-              <p>`PATCH /v1/projects/:id` can update rate limits, daily limits, and webhooks.</p>
+              <strong>Inspection</strong>
+              <p>Use the portal for day-to-day timelines and replay, or call the message/event endpoints directly.</p>
+            </div>
+            <div class="note">
+              <strong>Domains</strong>
+              <p>DNS instructions live in the portal so the exact records stay attached to the claim state.</p>
             </div>
           </div>
         </section>
@@ -282,6 +286,11 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
             </div>
             <div class="docs-row" role="row">
               <strong role="cell">GET</strong>
+              <code role="cell">/v1/messages</code>
+              <span role="cell">List outbound messages for one project</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">GET</strong>
               <code role="cell">/v1/messages/:id</code>
               <span role="cell">Inspect one message</span>
             </div>
@@ -296,29 +305,24 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
               <span role="cell">List inboxes</span>
             </div>
             <div class="docs-row" role="row">
-              <strong role="cell">POST</strong>
-              <code role="cell">/v1/projects/provision</code>
-              <span role="cell">Provision a project and issue a project token</span>
-            </div>
-            <div class="docs-row" role="row">
-              <strong role="cell">PATCH</strong>
-              <code role="cell">/v1/projects/:id</code>
-              <span role="cell">Update project settings and limits</span>
+              <strong role="cell">GET</strong>
+              <code role="cell">/v1/events</code>
+              <span role="cell">List delivery events for one project</span>
             </div>
             <div class="docs-row" role="row">
               <strong role="cell">POST</strong>
-              <code role="cell">/v1/domains</code>
-              <span role="cell">Create a sender domain and get DNS records</span>
+              <code role="cell">/v1/events/:id/replay</code>
+              <span role="cell">Replay one outbound webhook event</span>
             </div>
             <div class="docs-row" role="row">
               <strong role="cell">GET</strong>
-              <code role="cell">/admin/openapi.json</code>
-              <span role="cell">Machine-readable admin API contract</span>
+              <code role="cell">/v1/inbound/messages/:id</code>
+              <span role="cell">Inspect one inbound message</span>
             </div>
             <div class="docs-row" role="row">
               <strong role="cell">POST</strong>
-              <code role="cell">/admin/setup</code>
-              <span role="cell">Provision one integration from the admin API</span>
+              <code role="cell">/v1/inbound/messages/:id/replay</code>
+              <span role="cell">Replay one inbound webhook delivery</span>
             </div>
           </div>
         </section>

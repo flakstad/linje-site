@@ -1,8 +1,8 @@
 // Minimal Cloudflare Worker proxy for linje-site signup submissions.
 //
 // Required Worker secrets/env:
-// - LINJE_SIGNUP_URL  e.g. "https://api.linje.systems/admin/signups" or your account-service endpoint
-// - LINJE_ADMIN_TOKEN (optional; required only if your upstream needs bearer auth)
+// - LINJE_SIGNUP_URL    e.g. "https://api.linje.systems/account-signups" or your account-service endpoint
+// - LINJE_UPSTREAM_TOKEN (optional; required only if your upstream needs bearer auth)
 //
 // Optional:
 // - ALLOWED_ORIGIN    e.g. "https://linje.systems"
@@ -94,8 +94,8 @@ export default {
       "idempotency-key": idempotencyKey,
       "content-type": "application/json"
     };
-    if (env.LINJE_ADMIN_TOKEN) {
-      headers.authorization = `Bearer ${env.LINJE_ADMIN_TOKEN}`;
+    if (env.LINJE_UPSTREAM_TOKEN) {
+      headers.authorization = `Bearer ${env.LINJE_UPSTREAM_TOKEN}`;
     }
 
     const upstream = await fetch(signupUrl, {

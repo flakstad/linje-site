@@ -1,11 +1,11 @@
 # linje-site
 
-Public landing + account signup site for Linje.
+Public landing, docs, and access-request site for Linje.
 
 ## Goals
 
 - communicate the product boundary clearly: transactional outbound + inbound webhooks
-- capture account signups for access to the logged-in API/admin system
+- capture account signups for access to the logged-in portal and project setup
 - keep marketing/site concerns separate from core control-plane runtime
 
 ## Local preview
@@ -23,8 +23,8 @@ Edit `site-config.js`:
 - `signupEndpoint`: server-side endpoint that accepts JSON signup payloads
 - `analyticsEndpoint`: optional endpoint for conversion events
 
-Do not point `signupEndpoint` directly at Linje `/admin/*` from the browser.
-The site is public, so admin credentials must stay server-side.
+Do not point `signupEndpoint` directly at a credentialed Linje endpoint from the browser.
+The site is public, so any credentialed upstream must stay server-side.
 
 When `signupEndpoint` is empty, submissions are saved to `localStorage` in demo mode.
 
