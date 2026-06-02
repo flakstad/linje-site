@@ -31,12 +31,14 @@ When `signupEndpoint` is empty, submissions are saved to `localStorage` in demo 
 ## Deploy (GitHub Pages)
 
 This repo includes `.github/workflows/deploy-pages.yml`.
+It also includes `CNAME`, so the Pages artifact declares the production domain `linje.systems`.
 
 Expected settings in GitHub:
 
 1. Enable Pages for the repository.
 2. Source: GitHub Actions.
-3. Push to `main` to deploy.
+3. Set the custom domain to `linje.systems` in the Pages settings if GitHub has not picked it up automatically.
+4. Push to `main` to deploy.
 
 ## Signup payload shape
 
@@ -53,8 +55,8 @@ Form sends JSON like:
   "use-case": "Password resets + receipts",
   "consent": true,
   "source": "linje-site",
-  "page": "https://linje.example/?utm_source=...",
-  "page-url": "https://linje.example/?utm_source=...",
+  "page": "https://linje.systems/?utm_source=...",
+  "page-url": "https://linje.systems/?utm_source=...",
   "captured_at": "2026-02-17T12:34:56.000Z",
   "captured-at": 1765802096000,
   "utm_source": "...",
