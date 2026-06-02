@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Email Webhook Replay | Linje</title>
+    <meta
+      name="description"
+      content="Replay failed inbound and outbound email webhooks with durable attempts, stable event ids, and signed delivery."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">Guide</p>
+        <a href="#overview">Overview</a>
+        <a href="#inbound">Inbound replay</a>
+        <a href="#outbound">Outbound replay</a>
+        <a href="#dedupe">Dedupe</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="overview" class="docs-hero" data-reveal>
+          <p class="eyebrow">Webhook Replay</p>
+          <h1>Recover when your webhook was down.</h1>
+          <p class="subhead">
+            Linje records webhook attempts for inbound email and outbound delivery events. When a
+            downstream endpoint fails, replay the existing record instead of asking the sender to
+            try again.
+          </p>
+        </section>
+
+        <section id="inbound" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Inbound</p>
+            <h2>Replay an inbound email webhook.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -X POST \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  https://api.linje.systems/v1/inbound/messages/&lt;inbound-id&gt;/replay</code></pre>
+        </section>
+
+        <section id="outbound" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Outbound</p>
+            <h2>Replay a message lifecycle event.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -X POST \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  https://api.linje.systems/v1/events/&lt;event-id&gt;/replay</code></pre>
+        </section>
+
+        <section id="dedupe" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Idempotency</p>
+            <h2>Webhook delivery is at least once.</h2>
+          </div>
+          <p>
+            Use stable event ids to dedupe in your application. Delivery ids are useful for logs,
+            but each retry receives a new delivery id.
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../email-to-webhook/">Email to webhook</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

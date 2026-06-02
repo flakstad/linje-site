@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pricing | Linje</title>
+    <meta
+      name="description"
+      content="Linje pricing for transactional email and inbound email webhooks. Simple usage pricing based on processed messages."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">Pricing</p>
+        <a href="#plans">Plans</a>
+        <a href="#messages">Messages</a>
+        <a href="#access">Access</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="plans" class="docs-hero" data-reveal>
+          <p class="eyebrow">Pricing</p>
+          <h1>Simple usage pricing.</h1>
+          <p class="subhead">
+            Pricing is based on messages processed each month. One outbound email is one message.
+            One inbound email delivered to your webhook is one message.
+          </p>
+
+          <div class="pricing-table" aria-label="Pricing plans">
+            <div class="pricing-row pricing-head">
+              <span>Plan</span>
+              <span>Monthly usage</span>
+              <span>Price</span>
+            </div>
+            <div class="pricing-row">
+              <strong>Starter</strong>
+              <span>500 messages / month</span>
+              <span>Free</span>
+            </div>
+            <div class="pricing-row">
+              <strong>Growth</strong>
+              <span>5,000 messages / month</span>
+              <span>$5 / month</span>
+            </div>
+            <div class="pricing-row">
+              <strong>Scale</strong>
+              <span>50,000 messages / month</span>
+              <span>$25 / month</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="messages" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Counting</p>
+            <h2>Messages are counted in both directions.</h2>
+          </div>
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Outbound</strong>
+              <p>Each transactional email submitted through Linje counts as one message.</p>
+            </div>
+            <div class="note">
+              <strong>Inbound</strong>
+              <p>Each inbound email delivered to a webhook counts as one message.</p>
+            </div>
+            <div class="note">
+              <strong>Replay</strong>
+              <p>Replay is for recovery and debugging, not a separate workflow product.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="access" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Access</p>
+            <h2>Tell us what your app needs.</h2>
+          </div>
+          <p>
+            Linje is currently access-request based while the hosted service is kept small and
+            operationally conservative.
+          </p>
+          <p><a class="button button-primary" href="../request-access/">Request access</a></p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../email-to-webhook/">Email to webhook</a>
+        <a href="../webhook-replay/">Replay</a>
+        <a href="../request-access/">Request access</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

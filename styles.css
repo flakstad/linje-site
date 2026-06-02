@@ -1,14 +1,32 @@
 :root {
-  --bg: #081014;
-  --bg-2: #0d1a21;
-  --ink: #f3f5ef;
-  --muted: #9fb0b7;
-  --line: rgba(123, 146, 152, 0.2);
-  --line-strong: rgba(136, 241, 139, 0.36);
-  --accent: #88f18b;
-  --accent-2: #59b8ff;
-  --accent-3: #ffd166;
-  --danger: #ff6c63;
+  color-scheme: light dark;
+  --bg: #f7f5ef;
+  --bg-2: #ece8dc;
+  --ink: #1b211f;
+  --muted: #64716c;
+  --line: rgba(74, 86, 81, 0.18);
+  --line-strong: rgba(28, 98, 74, 0.38);
+  --accent: #1d6b51;
+  --accent-2: #315f83;
+  --accent-3: #8a6124;
+  --danger: #b33b32;
+  --button-ink: #f8f6ee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #101512;
+    --bg-2: #18201c;
+    --ink: #f2f0e8;
+    --muted: #a4aea8;
+    --line: rgba(180, 190, 181, 0.18);
+    --line-strong: rgba(99, 177, 143, 0.34);
+    --accent: #74c69d;
+    --accent-2: #8eb8d8;
+    --accent-3: #d7b36d;
+    --danger: #ff8178;
+    --button-ink: #102018;
+  }
 }
 
 * {
@@ -24,9 +42,7 @@ body {
 
 body {
   background:
-    radial-gradient(circle at top right, rgba(89, 184, 255, 0.14), transparent 26rem),
-    radial-gradient(circle at bottom left, rgba(136, 241, 139, 0.12), transparent 28rem),
-    linear-gradient(180deg, #091116 0%, #0a1419 100%);
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-2) 72%, var(--bg)) 0%, var(--bg) 32rem);
   color: var(--ink);
   font-family: "Manrope", sans-serif;
   overflow-x: hidden;
@@ -41,26 +57,27 @@ a {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(110, 132, 139, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(110, 132, 139, 0.08) 1px, transparent 1px);
-  background-size: 3.4rem 3.4rem;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.28));
+    linear-gradient(color-mix(in srgb, var(--line) 54%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 54%, transparent) 1px, transparent 1px);
+  background-size: 4.6rem 4.6rem;
+  opacity: 0.45;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 70%);
 }
 
 .concept-bar,
 .signal-main,
 .site-footer,
 .legal-shell {
-  width: min(1180px, calc(100% - 2rem));
+  width: min(1120px, calc(100% - clamp(2rem, 6vw, 5rem)));
   margin: 0 auto;
 }
 
 .concept-bar {
-  padding: 1.2rem 0 0;
+  padding: clamp(1.4rem, 3vw, 2.4rem) 0 0;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 1rem;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .brand {
@@ -73,11 +90,17 @@ a {
   text-decoration: none;
 }
 
-.top-link {
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.site-nav a {
   color: var(--muted);
   text-decoration: none;
   border: 1px solid var(--line);
-  padding: 0.55rem 0.9rem;
+  padding: 0.7rem 1rem;
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.8rem;
 }
@@ -93,12 +116,13 @@ a {
 }
 
 .signal-main {
-  padding: 2.4rem 0 4rem;
+  padding: clamp(3.2rem, 7vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
 }
 
 .signal-hero,
 .signal-rails,
 .signal-details,
+.seo-section,
 .pricing-section,
 .signup-section,
 .legal-shell {
@@ -108,9 +132,10 @@ a {
 .signal-hero,
 .signal-rails,
 .signal-details,
+.seo-section,
 .pricing-section,
 .signup-section {
-  padding: 2.5rem 0;
+  padding: clamp(3.5rem, 7vw, 6.5rem) 0;
 }
 
 .eyebrow,
@@ -138,9 +163,9 @@ h3 {
 }
 
 h1 {
-  margin-top: 0.85rem;
-  max-width: 15ch;
-  font-size: clamp(3.2rem, 8vw, 6.6rem);
+  margin-top: 1.1rem;
+  max-width: 16ch;
+  font-size: clamp(3rem, 7vw, 6rem);
 }
 
 h2 {
@@ -164,13 +189,13 @@ h3 {
 
 .subhead {
   max-width: 44rem;
-  margin: 1rem 0 1.2rem;
-  font-size: 1.1rem;
+  margin: 1.4rem 0 1.7rem;
+  font-size: clamp(1.05rem, 1.4vw, 1.22rem);
 }
 
 .hero-meta {
   gap: 0.7rem 1rem;
-  margin-bottom: 1.4rem;
+  margin-bottom: 2rem;
 }
 
 .hero-meta span {
@@ -193,8 +218,8 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 3rem;
-  padding: 0.75rem 1rem;
+  min-height: 3.2rem;
+  padding: 0.85rem 1.15rem;
   border: 1px solid transparent;
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -204,8 +229,8 @@ h3 {
 }
 
 .button-primary {
-  background: linear-gradient(90deg, var(--accent), #b5ff8a);
-  color: #0a150e;
+  background: var(--accent);
+  color: var(--button-ink);
 }
 
 .button-ghost {
@@ -221,9 +246,9 @@ h3 {
 .rail-row {
   display: grid;
   grid-template-columns: minmax(220px, 0.68fr) minmax(320px, 1.1fr) minmax(260px, 0.82fr);
-  gap: 1.2rem;
+  gap: clamp(1.5rem, 4vw, 3rem);
   align-items: start;
-  padding: 1.4rem 0;
+  padding: clamp(1.8rem, 4vw, 3rem) 0;
 }
 
 .rail-row + .rail-row {
@@ -273,7 +298,11 @@ h3 {
   left: 0.3rem;
   width: calc(100% + var(--rail-gap));
   height: 1px;
-  background: linear-gradient(90deg, rgba(136, 241, 139, 0.34), rgba(255, 209, 102, 0.28));
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 34%, transparent),
+    color-mix(in srgb, var(--accent-3) 28%, transparent)
+  );
 }
 
 .rail-chain-inbound .rail-stop::before {
@@ -282,15 +311,19 @@ h3 {
 }
 
 .rail-chain-inbound .rail-stop:not(:last-child)::after {
-  background: linear-gradient(90deg, rgba(89, 184, 255, 0.34), rgba(136, 241, 139, 0.28));
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent-2) 34%, transparent),
+    color-mix(in srgb, var(--accent) 28%, transparent)
+  );
 }
 
 pre {
   margin: 0;
-  padding: 0 0 0 1rem;
+  padding: 0.2rem 0 0.2rem 1.1rem;
   overflow: auto;
   border-left: 1px solid var(--line);
-  color: #dbe9ea;
+  color: color-mix(in srgb, var(--ink) 84%, var(--accent-2));
   background: transparent;
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.86rem;
@@ -299,7 +332,7 @@ pre {
 .signal-details {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 1.2rem;
+  gap: clamp(1.5rem, 4vw, 3rem);
   align-items: start;
 }
 
@@ -310,7 +343,7 @@ pre {
 .detail-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: clamp(1.25rem, 3vw, 2rem);
 }
 
 .detail-item {
@@ -322,10 +355,49 @@ pre {
   margin-bottom: 0.55rem;
 }
 
+.seo-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(320px, 1.28fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.seo-copy h2 {
+  margin-top: 0.65rem;
+}
+
+.seo-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+
+.seo-links a {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.seo-links strong {
+  font-family: "Oxanium", sans-serif;
+  font-size: 1.05rem;
+}
+
+.seo-links span {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.seo-links a:hover strong {
+  color: var(--accent);
+}
+
 .pricing-section {
   display: grid;
   grid-template-columns: minmax(0, 0.72fr) minmax(320px, 1.28fr);
-  gap: 1.2rem;
+  gap: clamp(1.5rem, 4vw, 3rem);
   align-items: start;
 }
 
@@ -373,7 +445,7 @@ pre {
 .signup-section {
   display: grid;
   grid-template-columns: minmax(0, 0.72fr) minmax(320px, 1.28fr);
-  gap: 1.2rem;
+  gap: clamp(1.5rem, 4vw, 3rem);
   align-items: start;
 }
 
@@ -417,7 +489,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: #7c9198;
+  color: color-mix(in srgb, var(--muted) 72%, transparent);
 }
 
 .consent {
@@ -467,15 +539,13 @@ textarea::placeholder {
 }
 
 .site-footer a:hover,
-.top-link:hover,
+.site-nav a:hover,
 .legal-actions a:hover {
   color: var(--accent);
 }
 
 .legal-page {
-  background:
-    radial-gradient(circle at top right, rgba(89, 184, 255, 0.12), transparent 20rem),
-    linear-gradient(180deg, #091116 0%, #0c151b 100%);
+  background: var(--bg);
 }
 
 .legal-shell {
@@ -515,6 +585,7 @@ textarea::placeholder {
   .concept-bar,
   .site-footer,
   .signal-details,
+  .seo-section,
   .pricing-section,
   .signup-section {
     grid-template-columns: 1fr;
@@ -527,6 +598,10 @@ textarea::placeholder {
   }
 
   .detail-list {
+    grid-template-columns: 1fr;
+  }
+
+  .seo-links {
     grid-template-columns: 1fr;
   }
 
@@ -573,11 +648,19 @@ textarea::placeholder {
     left: 0.25rem;
     width: 1px;
     height: calc(100% + var(--rail-gap));
-    background: linear-gradient(180deg, rgba(136, 241, 139, 0.34), rgba(255, 209, 102, 0.28));
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 34%, transparent),
+      color-mix(in srgb, var(--accent-3) 28%, transparent)
+    );
   }
 
   .rail-chain-inbound .rail-stop:not(:last-child)::after {
-    background: linear-gradient(180deg, rgba(89, 184, 255, 0.34), rgba(136, 241, 139, 0.28));
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-2) 34%, transparent),
+      color-mix(in srgb, var(--accent) 28%, transparent)
+    );
   }
 
   .form-actions {

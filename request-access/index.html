@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Request Access | Linje</title>
+    <meta
+      name="description"
+      content="Request access to Linje for transactional email and inbound email webhooks."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page" data-variant="request-access">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+      </nav>
+    </header>
+
+    <main class="signal-main">
+      <section class="signup-section" data-reveal>
+        <div class="signup-copy">
+          <p class="eyebrow">Request access</p>
+          <h1>Tell us what your app needs.</h1>
+          <p>
+            We only need enough context to provision access to the logged-in Linje system.
+          </p>
+        </div>
+
+        <form id="signup-form" class="signup-form" novalidate data-variant="request-access">
+          <div class="form-grid">
+            <label>
+              Work email
+              <input type="email" name="email" required placeholder="you@company.com" />
+            </label>
+            <label>
+              Company
+              <input type="text" name="company" required placeholder="Acme Inc" />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required placeholder="Jane Doe" />
+            </label>
+            <label>
+              Monthly transactional volume
+              <select name="volume" required>
+                <option value="">Select</option>
+                <option value="<10k">&lt;10k</option>
+                <option value="10k-100k">10k-100k</option>
+                <option value="100k-1m">100k-1m</option>
+                <option value=">1m">&gt;1m</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Primary use case
+            <textarea
+              name="use_case"
+              rows="4"
+              required
+              placeholder="Password resets, receipts, inbound support replies, mailbox-to-webhook flows..."
+            ></textarea>
+          </label>
+
+          <label class="consent">
+            <input type="checkbox" name="consent" required />
+            I agree Linje can contact me to complete account setup.
+          </label>
+
+          <div class="form-actions">
+            <button class="button button-primary" type="submit" data-track="cta_request_access_form_submit">
+              Request access
+            </button>
+            <p id="form-status" class="form-status" data-form-status role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../email-to-webhook/">Email to webhook</a>
+        <a href="../webhook-replay/">Replay</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+
+    <script src="../site-config.js"></script>
+    <script src="../app.js"></script>
+  </body>
+</html>

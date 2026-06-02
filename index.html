@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Linje | Signal</title>
+    <title>Linje | Transactional Email and Inbound Webhooks</title>
     <meta
       name="description"
-      content="Send transactional email from your app. Receive incoming email as webhooks."
+      content="Transactional email and inbound email webhooks for product developers. Send product email, receive signed JSON webhooks, and replay delivery failures."
     />
-    <meta property="og:title" content="Linje | Signal" />
+    <meta property="og:title" content="Linje | Transactional Email and Inbound Webhooks" />
     <meta
       property="og:description"
-      content="Send transactional email. Receive incoming email as webhooks."
+      content="Send product email from your app. Receive inbound email as signed JSON webhooks."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://linje.example" />
+    <meta property="og:url" content="https://linje.systems/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -26,30 +26,35 @@
   <body data-variant="signal">
     <div class="signal-grid" aria-hidden="true"></div>
 
-    <header class="concept-bar">
+    <header class="concept-bar docs-bar">
       <a class="brand" href="index.html">Linje</a>
-      <a class="top-link" href="docs/index.html">Docs</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="index.html">Home</a>
+        <a href="docs/index.html">Docs</a>
+        <a href="inbound-email-webhook/">Inbound webhooks</a>
+        <a href="pricing/">Pricing</a>
+        <a href="request-access/">Request access</a>
+      </nav>
     </header>
 
     <main class="signal-main">
       <section class="signal-hero" data-reveal>
-        <p class="eyebrow">Simple email infrastructure</p>
-        <h1>Send transactional email. Turn incoming email into webhooks.</h1>
+        <p class="eyebrow">Product email infrastructure</p>
+        <h1>Transactional email and inbound webhooks.</h1>
         <p class="subhead">
-          Use Linje to send transactional email from your app, receive inbound email as structured
-          webhooks, or handle both in one place.
+          Send the email your product depends on. Receive replies and inbound messages in your
+          application. Keep the delivery trail inspectable when something fails.
         </p>
         <div class="hero-meta" aria-label="Common use cases">
           <span>HTTP to email</span>
           <span>Email to HTTP</span>
           <span>Receipts</span>
           <span>Magic links</span>
-          <span>Password resets</span>
           <span>Replies</span>
-          <span>Support inboxes</span>
+          <span>No campaigns</span>
         </div>
         <div class="hero-actions">
-          <a href="#signup" class="button button-primary" data-track="cta_signal_signup">Request access</a>
+          <a href="request-access/" class="button button-primary" data-track="cta_signal_signup">Request access</a>
           <a href="docs/index.html" class="button button-ghost" data-track="cta_signal_docs">Read docs</a>
         </div>
       </section>
@@ -58,9 +63,9 @@
         <article class="rail-row">
           <div class="rail-copy">
             <p class="eyebrow">Outgoing</p>
-            <h2>Your app posts a message. Linje sends the email.</h2>
+            <h2>Your app sends product email.</h2>
             <p>
-              Use it for magic links, receipts, password resets, invites, and other product mail.
+              Use one API for receipts, magic links, password resets, invites, and alerts.
             </p>
           </div>
 
@@ -83,10 +88,10 @@
         <article class="rail-row rail-row-inbound">
           <div class="rail-copy">
             <p class="eyebrow">Incoming</p>
-            <h2>An email arrives. Your app gets a webhook.</h2>
+            <h2>Incoming email returns to your app.</h2>
             <p>
-              Use a Linje inbox directly or forward mail into one. Linje sends your endpoint a
-              signed, structured payload.
+              Use an inbox directly or forward mail into one. Linje sends your endpoint a signed
+              payload with the message and attachments.
             </p>
           </div>
 
@@ -111,31 +116,57 @@ POST https://app.example.com/inbound
 
       <section class="signal-details" data-reveal>
         <div class="detail-intro">
-          <p class="eyebrow">Why teams pick it</p>
+          <p class="eyebrow">Product boundary</p>
           <h2>One small service with a clear job.</h2>
           <p>
-            Linje keeps email close to the rest of your application instead of becoming a separate
-            system your team has to think about all day.
+            Linje handles product email in both directions, then gets out of the way. Business
+            workflows stay in your app.
           </p>
         </div>
 
         <div class="detail-list">
           <article class="detail-item">
-            <h3>HTTP out</h3>
-            <p>Send product mail with one API call.</p>
+            <h3>HTTP to email</h3>
+            <p>Send receipts, magic links, password resets, invites, and alerts.</p>
           </article>
           <article class="detail-item">
-            <h3>Email back in</h3>
-            <p>Inbound mail becomes a webhook your app can use.</p>
+            <h3>Email to HTTP</h3>
+            <p>Turn inbound email and attachments into signed webhook events.</p>
           </article>
           <article class="detail-item">
-            <h3>Simple to operate</h3>
-            <p>Useful tools when you need them. Simple API at the center.</p>
+            <h3>No ESP creep</h3>
+            <p>No campaigns, lists, open tracking, click tracking, or workflow builder.</p>
           </article>
         </div>
       </section>
 
-      <section class="pricing-section" data-reveal>
+      <section class="seo-section" data-reveal>
+        <div class="seo-copy">
+          <p class="eyebrow">Common jobs</p>
+          <h2>Start where email touches your product.</h2>
+        </div>
+
+        <div class="seo-links" aria-label="Focused Linje guides">
+          <a href="transactional-email-api/">
+            <strong>Transactional Email API</strong>
+            <span>Send the product messages users expect to receive.</span>
+          </a>
+          <a href="inbound-email-webhook/">
+            <strong>Inbound Email Webhooks</strong>
+            <span>Receive email and attachments inside your application.</span>
+          </a>
+          <a href="email-to-webhook/">
+            <strong>Email to Webhook</strong>
+            <span>Turn replies and inbound addresses into application events.</span>
+          </a>
+          <a href="webhook-replay/">
+            <strong>Webhook Replay</strong>
+            <span>Recover cleanly when a downstream handler was down.</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="pricing" class="pricing-section" data-reveal>
         <div class="pricing-copy">
           <p class="eyebrow">Pricing</p>
           <h2>Simple usage pricing.</h2>
@@ -236,6 +267,12 @@ POST https://app.example.com/inbound
       <p>Linje</p>
       <div>
         <a href="docs/index.html">Docs</a>
+        <a href="transactional-email-api/">Transactional email</a>
+        <a href="inbound-email-webhook/">Inbound webhooks</a>
+        <a href="email-to-webhook/">Email to webhook</a>
+        <a href="webhook-replay/">Replay</a>
+        <a href="pricing/">Pricing</a>
+        <a href="request-access/">Request access</a>
         <a href="privacy.html">Privacy</a>
       </div>
     </footer>

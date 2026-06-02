@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inbound Email Webhooks | Linje</title>
+    <meta
+      name="description"
+      content="Receive inbound email as signed JSON webhooks with attachments, retries, replay, and inspection."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">Guide</p>
+        <a href="#overview">Overview</a>
+        <a href="#create">Create inbox</a>
+        <a href="#payload">Payload</a>
+        <a href="#verify">Verify</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="overview" class="docs-hero" data-reveal>
+          <p class="eyebrow">Inbound Email Webhooks</p>
+          <h1>Receive email inside your application.</h1>
+          <p class="subhead">
+            Provision inboxes, receive inbound email as signed webhooks, download attachments, and
+            replay delivery when your endpoint fails.
+          </p>
+        </section>
+
+        <section id="create" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Inbox</p>
+            <h2>Create or update an inbound address.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -X POST \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "content-type: application/json" \
+  -d '{
+    "id":"support",
+    "webhook-url":"https://app.example.com/linje/inbound"
+  }' \
+  https://api.linje.systems/v1/inboxes</code></pre>
+        </section>
+
+        <section id="payload" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Webhook</p>
+            <h2>Linje posts a stable envelope to your endpoint.</h2>
+          </div>
+          <pre><code>POST https://app.example.com/linje/inbound
+x-linje-inbound-id: ...
+x-linje-delivery-id: ...
+x-linje-timestamp: ...
+x-linje-signature: sha256=...
+
+{
+  "schema":"linje.inbound-email.v1",
+  "event-id":"...",
+  "email": {
+    "from":"customer@example.com",
+    "subject":"Need help"
+  },
+  "attachments":[
+    {"download":{"url":"https://api.linje.systems/..."}}
+  ]
+}</code></pre>
+        </section>
+
+        <section id="verify" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Signatures</p>
+            <h2>Verify against raw request body bytes.</h2>
+          </div>
+          <pre><code>expected = HMAC_SHA256(secret, timestamp + "." + raw_body)
+x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
+          <p>
+            Webhook delivery is at least once. Use the payload event id or inbound id to dedupe.
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../email-to-webhook/">Email to webhook</a>
+        <a href="../webhook-replay/">Replay</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://linje.example/</loc>
+    <loc>https://linje.systems/</loc>
   </url>
   <url>
-    <loc>https://linje.example/privacy.html</loc>
+    <loc>https://linje.systems/privacy.html</loc>
   </url>
   <url>
-    <loc>https://linje.example/docs/</loc>
+    <loc>https://linje.systems/docs/</loc>
+  </url>
+  <url>
+    <loc>https://linje.systems/transactional-email-api/</loc>
+  </url>
+  <url>
+    <loc>https://linje.systems/inbound-email-webhook/</loc>
+  </url>
+  <url>
+    <loc>https://linje.systems/email-to-webhook/</loc>
+  </url>
+  <url>
+    <loc>https://linje.systems/webhook-replay/</loc>
+  </url>
+  <url>
+    <loc>https://linje.systems/pricing/</loc>
+  </url>
+  <url>
+    <loc>https://linje.systems/request-access/</loc>
   </url>
 </urlset>
