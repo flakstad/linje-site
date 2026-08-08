@@ -226,6 +226,7 @@ x-linje-signature: sha256=...
 
           <pre><code>curl -fsS \
   -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "Idempotency-Key: 018f47d2-89ab-4cde-8123-456789abcdef" \
   -H "content-type: application/json" \
   -d '{
     "inbox-id":"orders",
