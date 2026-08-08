@@ -64,7 +64,7 @@
     "active":true
   }
 }</code></pre>
-          <p>Use a fresh UUIDv4 as the idempotency key for each logical route. Exact retries return the same route and address; conflicting reuse returns 409. The route registry stores a hash of its token.</p>
+          <p>Use a fresh UUIDv4 as the idempotency key for each logical route. Concurrent and sequential exact retries return the same route and address; conflicting reuse returns 409. After retention cleanup, a retry returns 410 so a purged address cannot be revived or rebound.</p>
         </section>
 
         <section id="send" class="docs-section" data-reveal>
@@ -118,7 +118,7 @@ x-linje-signature: sha256=...
   -d '{"active":false}' \
   https://api.linje.systems/v1/reply-routes/route_...</code></pre>
           <p>Disabled, expired, malformed, and unknown routes do not reach the target inbox webhook and do not expose caller metadata.</p>
-          <p>Route listings use <code>next-cursor</code> pagination. Disabled and expired routes can be removed after the configured retention window.</p>
+          <p>Route listings use <code>next-cursor</code> pagination. Disabled and expired routes can be removed after the configured retention window; Linje retains only a minimal hash tombstone.</p>
         </section>
 
         <section id="boundary" class="docs-section" data-reveal>
