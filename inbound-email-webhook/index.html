@@ -79,9 +79,13 @@ x-linje-signature: sha256=...
 {
   "schema":"linje.inbound-email.v1",
   "event-id":"...",
+  "inbound-id":"...",
+  "inbox-id":"support",
   "email": {
-    "from":"customer@example.com",
-    "subject":"Need help"
+    "from":[{"email":"customer@example.com"}],
+    "subject":"Need help",
+    "in-reply-to":[],
+    "references":[]
   },
   "attachments":[
     {"download":{"url":"https://api.linje.systems/..."}}
@@ -109,6 +113,7 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
         <a href="../docs/">Docs</a>
         <a href="../transactional-email-api/">Transactional email</a>
         <a href="../email-to-webhook/">Email to webhook</a>
+        <a href="../reply-by-email-api/">Replies</a>
         <a href="../webhook-replay/">Replay</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>

@@ -39,6 +39,7 @@
         <a href="#send">Send email</a>
         <a href="#quickstarts">Quickstarts</a>
         <a href="#inbound">Inbound email</a>
+        <a href="#replies">Replies</a>
         <a href="#signatures">Signatures</a>
         <a href="#projects">Projects</a>
         <a href="#events">Event webhooks</a>
@@ -158,7 +159,11 @@
             </a>
             <a href="../email-to-webhook/">
               <strong>Route email to HTTP</strong>
-              <span>Use provisioned inboxes for replies, support, and workflow events.</span>
+              <span>Use provisioned inboxes for replies, support, and application events.</span>
+            </a>
+            <a href="../reply-by-email-api/">
+              <strong>Correlate replies</strong>
+              <span>Generate opaque Reply-To addresses with caller metadata.</span>
             </a>
             <a href="../webhook-replay/">
               <strong>Replay failed webhooks</strong>
@@ -192,12 +197,51 @@ x-linje-inbound-id: ...
 x-linje-signature: sha256=...
 
 {
+  "schema":"linje.inbound-email.v1",
   "event-id":"...",
-  "from":"user@example.com",
-  "to":"support@in.example.com",
-  "subject":"Need help",
+  "inbound-id":"...",
+  "inbox-id":"support",
+  "email": {
+    "from":[{"email":"user@example.com"}],
+    "to":[{"email":"support@in.example.com"}],
+    "subject":"Need help",
+    "in-reply-to":[],
+    "references":[]
+  },
   "attachments":[...]
 }</code></pre>
+        </section>
+
+        <section id="replies" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Programmable replies</p>
+            <h2>Map a reply back to an application object.</h2>
+          </div>
+
+          <p>
+            Create an opaque reply route for a project-owned inbox, then use the address returned at
+            creation as the outbound message's Reply-To. The inbound webhook includes the route ID
+            and your immutable metadata.
+          </p>
+
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "content-type: application/json" \
+  -d '{
+    "inbox-id":"orders",
+    "metadata":{"order-id":"order_82921"}
+  }' \
+  https://api.linje.systems/v1/reply-routes</code></pre>
+
+          <pre><code>{
+  "reply-route": {
+    "id":"route_...",
+    "address":"r+012345...@in.linje.systems",
+    "metadata":{"order-id":"order_82921"}
+  }
+}</code></pre>
+
+          <p><a href="../reply-by-email-api/">Read the reply-by-email guide.</a></p>
         </section>
 
         <section id="signatures" class="docs-section" data-reveal>
@@ -249,7 +293,7 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
           <div class="inline-notes">
             <div class="note">
               <strong>Project token</strong>
-              <p>Use it for `POST /v1/messages`, `GET /v1/messages`, `GET /v1/events`, and `POST /v1/inboxes`.</p>
+              <p>Use it for messages, events, project inboxes, and reply routes.</p>
             </div>
             <div class="note">
               <strong>Inspection</strong>
@@ -363,6 +407,21 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
               <span role="cell">List inboxes</span>
             </div>
             <div class="docs-row" role="row">
+              <strong role="cell">POST</strong>
+              <code role="cell">/v1/reply-routes</code>
+              <span role="cell">Create an opaque reply address</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">GET</strong>
+              <code role="cell">/v1/reply-routes</code>
+              <span role="cell">List one project's reply routes</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">PATCH</strong>
+              <code role="cell">/v1/reply-routes/:id</code>
+              <span role="cell">Disable, enable, or change route expiry</span>
+            </div>
+            <div class="docs-row" role="row">
               <strong role="cell">GET</strong>
               <code role="cell">/v1/events</code>
               <span role="cell">List delivery events for one project</span>
@@ -394,6 +453,7 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
         <a href="../transactional-email-api/">Transactional email</a>
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
         <a href="../email-to-webhook/">Email to webhook</a>
+        <a href="../reply-by-email-api/">Replies</a>
         <a href="../webhook-replay/">Replay</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>

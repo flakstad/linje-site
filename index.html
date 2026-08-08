@@ -107,9 +107,41 @@
 
 POST https://app.example.com/inbound
 {
-  "from": "user@example.com",
-  "subject": "Reply",
+  "inbound-id": "...",
+  "email": {
+    "from": [{"email":"user@example.com"}],
+    "subject": "Reply"
+  },
   "attachments": [...]
+}</code></pre>
+        </article>
+
+        <article class="rail-row rail-row-inbound">
+          <div class="rail-copy">
+            <p class="eyebrow">Replies</p>
+            <h2>A reply returns to the object that sent it.</h2>
+            <p>
+              Generate an opaque Reply-To address with caller metadata. Linje maps the reply back
+              without exposing a business identifier in the address.
+            </p>
+          </div>
+
+          <div class="rail-diagram" aria-label="Reply correlation flow">
+            <div class="rail-chain rail-chain-inbound">
+              <span class="rail-stop">Application object</span>
+              <span class="rail-stop">Reply address</span>
+              <span class="rail-stop">Webhook event</span>
+            </div>
+          </div>
+
+          <pre><code>POST /v1/reply-routes
+{"inbox-id":"orders",
+ "metadata":{"order-id":"order_82921"}}
+
+WEBHOOK
+"route": {
+  "id": "route_...",
+  "metadata": {"order-id":"order_82921"}
 }</code></pre>
         </article>
       </section>
@@ -158,6 +190,10 @@ POST https://app.example.com/inbound
           <a href="email-to-webhook/">
             <strong>Email to Webhook</strong>
             <span>Turn replies and inbound addresses into application events.</span>
+          </a>
+          <a href="reply-by-email-api/">
+            <strong>Reply by Email API</strong>
+            <span>Map human replies back to application objects.</span>
           </a>
           <a href="webhook-replay/">
             <strong>Webhook Replay</strong>
@@ -241,6 +277,7 @@ POST https://app.example.com/inbound
         <a href="transactional-email-api/">Transactional email</a>
         <a href="inbound-email-webhook/">Inbound webhooks</a>
         <a href="email-to-webhook/">Email to webhook</a>
+        <a href="reply-by-email-api/">Replies</a>
         <a href="webhook-replay/">Replay</a>
         <a href="pricing/">Pricing</a>
         <a href="request-access/">Request access</a>
