@@ -5,7 +5,7 @@ Public landing, docs, and access-request site for Linje.
 ## Goals
 
 - communicate the product boundary clearly: transactional outbound + inbound webhooks
-- capture account signups for access to the logged-in portal and project setup
+- provide an honest access-request path and a clear route into the logged-in portal
 - keep marketing/site concerns separate from core control-plane runtime
 
 ## Local preview
@@ -20,13 +20,7 @@ python3 -m http.server 8787
 
 Edit `site-config.js`:
 
-- `signupEndpoint`: server-side endpoint that accepts JSON signup payloads
 - `analyticsEndpoint`: optional endpoint for conversion events
-
-Do not point `signupEndpoint` directly at a credentialed Linje endpoint from the browser.
-The site is public, so any credentialed upstream must stay server-side.
-
-When `signupEndpoint` is empty, submissions are saved to `localStorage` in demo mode.
 
 ## Deploy (GitHub Pages)
 
@@ -40,43 +34,7 @@ Expected settings in GitHub:
 3. Set the custom domain to `linje.systems` in the Pages settings if GitHub has not picked it up automatically.
 4. Push to `main` to deploy.
 
-## Signup payload shape
-
-Form sends JSON like:
-
-```json
-{
-  "intent": "account-signup",
-  "email": "you@company.com",
-  "company": "Acme Inc",
-  "name": "Jane Doe",
-  "volume": "10k-100k",
-  "use_case": "Password resets + receipts",
-  "use-case": "Password resets + receipts",
-  "consent": true,
-  "source": "linje-site",
-  "page": "https://linje.systems/?utm_source=...",
-  "page-url": "https://linje.systems/?utm_source=...",
-  "captured_at": "2026-02-17T12:34:56.000Z",
-  "captured-at": 1765802096000,
-  "utm_source": "...",
-  "utm-source": "...",
-  "utm_medium": "...",
-  "utm-medium": "...",
-  "utm_campaign": "...",
-  "utm-campaign": "...",
-  "idempotency_key": "you@company.com:1765802096000"
-}
-```
-
-## Proxy pattern
-
-Recommended server-side behavior:
-
-1. Receive signup payload over HTTPS.
-2. Validate required fields and normalize keys.
-3. Forward into your account provisioning workflow (or temporary signup intake API).
-4. Preserve `idempotency_key` for safe retries.
-5. Return non-sensitive success/error to browser.
-
-See `examples/cloudflare-signup-proxy.js` for a minimal Worker example.
+Access requests currently use a direct `mailto:hello@linje.systems` flow. Existing customers sign
+in at `https://api.linje.systems/portal/login`. Do not add a browser-side signup endpoint that
+requires Linje admin credentials; any future intake integration must keep those credentials
+server-side.

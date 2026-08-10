@@ -8,10 +8,17 @@
       name="description"
       content="Linje API docs for transactional email, inbound email webhooks, project setup, and operational inspection."
     />
+    <meta property="og:title" content="Linje Docs | Transactional Email and Inbound Webhooks" />
+    <meta property="og:description" content="Integrate transactional email, inbound email webhooks, programmable replies, signatures, and replay." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.systems/docs/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/docs/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../styles.css" />
@@ -28,6 +35,7 @@
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
       </nav>
     </header>
 
@@ -100,6 +108,11 @@
               <span role="cell">One inbox</span>
             </div>
           </div>
+          <p>
+            <a class="button button-primary" href="https://api.linje.systems/portal/login"
+              >Sign in to the portal</a
+            >
+          </p>
         </section>
 
         <section id="send" class="docs-section" data-reveal>
@@ -278,9 +291,10 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
           </div>
 
           <p>
-            Project owners do setup in the portal. Claim sender domains there, publish the DNS
-            records Linje gives you, then attach verified domains and copy the project token for
-            runtime use in your application.
+            Project owners do setup in the
+            <a href="https://api.linje.systems/portal/login">Linje portal</a>. Claim sender domains
+            there, publish the DNS records Linje gives you, then attach verified domains and copy
+            the project token for runtime use in your application.
           </p>
 
           <pre><code>Portal -&gt; Settings
@@ -458,6 +472,7 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
         <a href="../webhook-replay/">Replay</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
         <a href="../privacy.html">Privacy</a>
       </div>
     </footer>

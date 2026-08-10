@@ -8,10 +8,17 @@
       name="description"
       content="Request access to Linje for transactional email and inbound email webhooks."
     />
+    <meta property="og:title" content="Request Access | Linje" />
+    <meta property="og:description" content="Request access to Linje for transactional email, inbound email webhooks, or both." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.systems/request-access/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/request-access/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../styles.css" />
@@ -27,6 +34,7 @@
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
       </nav>
     </header>
 
@@ -34,60 +42,34 @@
       <section class="signup-section" data-reveal>
         <div class="signup-copy">
           <p class="eyebrow">Request access</p>
-          <h1>Tell us what your app needs.</h1>
+          <h1>Start with the email boundary your app needs.</h1>
           <p>
-            We only need enough context to provision access to the logged-in Linje system.
+            Public signup is currently closed while the hosted service stays small. Send us a
+            short email and we will reply directly.
           </p>
         </div>
 
-        <form id="signup-form" class="signup-form" novalidate data-variant="request-access">
-          <div class="form-grid">
-            <label>
-              Work email
-              <input type="email" name="email" required placeholder="you@company.com" />
-            </label>
-            <label>
-              Company
-              <input type="text" name="company" required placeholder="Acme Inc" />
-            </label>
-            <label>
-              Name
-              <input type="text" name="name" required placeholder="Jane Doe" />
-            </label>
-            <label>
-              Monthly transactional volume
-              <select name="volume" required>
-                <option value="">Select</option>
-                <option value="<10k">&lt;10k</option>
-                <option value="10k-100k">10k-100k</option>
-                <option value="100k-1m">100k-1m</option>
-                <option value=">1m">&gt;1m</option>
-              </select>
-            </label>
+        <div class="signup-closed-card">
+          <p class="signup-closed-title">What to include</p>
+          <p>
+            Tell us what you want to launch first: transactional email, inbound email and replies,
+            or both. Company and expected volume are helpful but optional.
+          </p>
+          <div class="signup-closed-actions">
+            <a
+              class="button button-primary"
+              href="mailto:hello@linje.systems?subject=Linje%20access"
+              data-track="cta_request_access_email"
+              >Email hello@linje.systems</a
+            >
+            <a
+              class="button button-ghost"
+              href="https://api.linje.systems/portal/login"
+              data-track="cta_request_access_sign_in"
+              >Already have access? Sign in</a
+            >
           </div>
-
-          <label>
-            Primary use case
-            <textarea
-              name="use_case"
-              rows="4"
-              required
-              placeholder="Password resets, receipts, inbound support replies, mailbox-to-webhook flows..."
-            ></textarea>
-          </label>
-
-          <label class="consent">
-            <input type="checkbox" name="consent" required />
-            I agree Linje can contact me to complete account setup.
-          </label>
-
-          <div class="form-actions">
-            <button class="button button-primary" type="submit" data-track="cta_request_access_form_submit">
-              Request access
-            </button>
-            <p id="form-status" class="form-status" data-form-status role="status" aria-live="polite"></p>
-          </div>
-        </form>
+        </div>
       </section>
     </main>
 
@@ -101,11 +83,11 @@
         <a href="../reply-by-email-api/">Replies</a>
         <a href="../webhook-replay/">Replay</a>
         <a href="../pricing/">Pricing</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
         <a href="../privacy.html">Privacy</a>
       </div>
     </footer>
 
-    <script src="../site-config.js"></script>
     <script src="../app.js"></script>
   </body>
 </html>

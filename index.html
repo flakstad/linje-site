@@ -15,10 +15,13 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://linje.systems/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -34,6 +37,7 @@
         <a href="inbound-email-webhook/">Inbound webhooks</a>
         <a href="pricing/">Pricing</a>
         <a href="request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
       </nav>
     </header>
 
@@ -145,6 +149,32 @@ WEBHOOK
   "metadata": {"order-id":"order_82921"}
 }</code></pre>
         </article>
+      </section>
+
+      <section class="signal-details reliability-section" data-reveal>
+        <div class="detail-intro">
+          <p class="eyebrow">Reliability</p>
+          <h2>The delivery trail is part of the product.</h2>
+          <p>
+            Linje stores the email event before callback delivery and keeps attempts visible when
+            your endpoint or the mail path fails.
+          </p>
+        </div>
+
+        <div class="detail-list">
+          <article class="detail-item">
+            <h3>Durable history</h3>
+            <p>Inspect message status, delivery attempts, bounces, and webhook responses.</p>
+          </article>
+          <article class="detail-item">
+            <h3>Retry and replay</h3>
+            <p>Automatic backoff handles transient failures. Replay the same event without creating a new email.</p>
+          </article>
+          <article class="detail-item">
+            <h3>Signed artifacts</h3>
+            <p>Verify callbacks with HMAC signatures and retrieve raw messages and attachments through controlled references.</p>
+          </article>
+        </div>
       </section>
 
       <section class="signal-details" data-reveal>
@@ -266,6 +296,12 @@ WEBHOOK
             <a href="docs/index.html" class="button button-ghost" data-track="cta_signal_docs_closed"
               >Read docs first</a
             >
+            <a
+              href="https://api.linje.systems/portal/login"
+              class="button button-ghost"
+              data-track="cta_signal_sign_in"
+              >Already have access? Sign in</a
+            >
           </div>
         </div>
       </section>
@@ -282,6 +318,7 @@ WEBHOOK
         <a href="webhook-replay/">Replay</a>
         <a href="pricing/">Pricing</a>
         <a href="request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
         <a href="privacy.html">Privacy</a>
       </div>
     </footer>

@@ -6,12 +6,19 @@
     <title>Email to Webhook | Linje</title>
     <meta
       name="description"
-      content="Turn incoming email into signed webhooks for support replies, customer-specific addresses, workflow events, and attachment intake."
+      content="Turn incoming email into signed webhooks for support replies, customer-specific addresses, application events, and attachment intake."
     />
+    <meta property="og:title" content="Email to Webhook | Linje" />
+    <meta property="og:description" content="Give your software an email address and receive messages, replies, and attachments as signed webhooks." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.systems/email-to-webhook/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/email-to-webhook/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=Oxanium:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../styles.css" />
@@ -27,6 +34,7 @@
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
       </nav>
     </header>
 
@@ -34,7 +42,10 @@
       <aside class="docs-nav">
         <p class="eyebrow">Guide</p>
         <a href="#overview">Overview</a>
+        <a href="#create">Create inbox</a>
+        <a href="#event">Receive event</a>
         <a href="#patterns">Patterns</a>
+        <a href="#reliability">Reliability</a>
         <a href="#boundary">Boundary</a>
       </aside>
 
@@ -46,6 +57,50 @@
             Linje receives mail for provisioned inboxes, stores the raw message and attachments,
             then posts a signed event to your application.
           </p>
+        </section>
+
+        <section id="create" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Quickstart</p>
+            <h2>Give your application an email address.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -X POST \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "content-type: application/json" \
+  -d '{
+    "id":"documents",
+    "webhook-url":"https://app.example.com/linje/inbound"
+  }' \
+  https://api.linje.systems/v1/inboxes</code></pre>
+          <p>
+            Send mail directly to the provisioned inbox or forward an existing address into it.
+          </p>
+        </section>
+
+        <section id="event" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Event</p>
+            <h2>Receive parsed email and stable artifacts.</h2>
+          </div>
+          <pre><code>POST https://app.example.com/linje/inbound
+x-linje-inbound-id: ...
+x-linje-delivery-id: ...
+x-linje-timestamp: ...
+x-linje-signature: sha256=...
+
+{
+  "schema":"linje.inbound-email.v1",
+  "event-id":"...",
+  "inbound-id":"...",
+  "inbox-id":"documents",
+  "email": {
+    "from":[{"email":"customer@example.com"}],
+    "subject":"Requested files"
+  },
+  "content":{"text":"Attached."},
+  "attachments":[{"download":{"url":"https://api.linje.systems/..."}}]
+}</code></pre>
         </section>
 
         <section id="patterns" class="docs-section" data-reveal>
@@ -72,6 +127,19 @@
           </div>
         </section>
 
+        <section id="reliability" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Reliability</p>
+            <h2>Store first. Sign, retry, inspect, and replay delivery.</h2>
+          </div>
+          <p>
+            Linje stores the raw message and attachments before callback delivery. Webhooks are
+            HMAC-signed and delivered at least once with automatic retry and an inspectable attempt
+            history. Replay redelivers the existing email event instead of creating a new message.
+          </p>
+          <p><a href="../webhook-replay/">Read the webhook replay guide.</a></p>
+        </section>
+
         <section id="boundary" class="docs-section" data-reveal>
           <div class="section-heading">
             <p class="eyebrow">Boundary</p>
@@ -81,6 +149,17 @@
             Linje does not extract fields, triage support cases, or run rules based on message
             contents. It delivers stable email artifacts to the system that owns that business
             logic.
+          </p>
+        </section>
+
+        <section class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Next step</p>
+            <h2>Start with inbound email, then add outbound when you need it.</h2>
+          </div>
+          <p>
+            <a class="button button-primary" href="../request-access/">Request access</a>
+            <a class="button button-ghost" href="https://api.linje.systems/portal/login">Sign in</a>
           </p>
         </section>
       </article>
@@ -96,6 +175,7 @@
         <a href="../webhook-replay/">Replay</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
         <a href="../privacy.html">Privacy</a>
       </div>
     </footer>
