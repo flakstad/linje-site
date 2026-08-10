@@ -35,6 +35,7 @@
         <a href="index.html">Home</a>
         <a href="docs/index.html">Docs</a>
         <a href="inbound-email-webhook/">Inbound webhooks</a>
+        <a href="reply-by-email-api/">Replies</a>
         <a href="pricing/">Pricing</a>
         <a href="request-access/">Request access</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
@@ -46,8 +47,9 @@
         <p class="eyebrow">Product email infrastructure</p>
         <h1>Transactional email and inbound webhooks.</h1>
         <p class="subhead">
-          Send the email your product depends on. Receive replies and inbound messages in your
-          application. Keep the delivery trail inspectable when something fails.
+          Send the email your product depends on. Let customers reply normally, then deliver each
+          answer to the right application object. Keep the delivery trail inspectable when
+          something fails.
         </p>
         <div class="hero-meta" aria-label="Common use cases">
           <span>HTTP to email</span>
@@ -224,7 +226,7 @@ WEBHOOK
           </a>
           <a href="reply-by-email-api/">
             <strong>Reply by Email API</strong>
-            <span>Map human replies back to application objects.</span>
+            <span>Route customer replies to the right order, ticket, invoice, or application object.</span>
           </a>
           <a href="webhook-replay/">
             <strong>Webhook Replay</strong>
@@ -242,7 +244,7 @@ WEBHOOK
           </p>
           <p class="pricing-note">
             One outbound email is one message. One inbound email delivered to your webhook is one
-            message.
+            message. Creating and keeping reply routes does not consume message usage.
           </p>
         </div>
 

@@ -26,6 +26,7 @@
         <a href="../index.html">Home</a>
         <a href="../docs/">Docs</a>
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
@@ -36,6 +37,8 @@
       <aside class="docs-nav">
         <p class="eyebrow">Guide</p>
         <a href="#overview">Overview</a>
+        <a href="#use-cases">Use cases</a>
+        <a href="#why">Why routes</a>
         <a href="#create">Create route</a>
         <a href="#send">Use Reply-To</a>
         <a href="#payload">Receive reply</a>
@@ -46,8 +49,58 @@
       <article class="docs-main">
         <section id="overview" class="docs-hero" data-reveal>
           <p class="eyebrow">Reply by Email API</p>
-          <h1>Turn a human reply into a correlated application event.</h1>
-          <p class="subhead">Generate an opaque Reply-To address for an application object. When the customer replies, Linje sends the email and your metadata to a signed inbox webhook.</p>
+          <h1>Let customers reply. Deliver the answer to the right object.</h1>
+          <p class="subhead">Give an order, ticket, invoice, or application object an opaque Reply-To address. When the customer replies normally, Linje sends the email and your metadata to a signed inbox webhook.</p>
+        </section>
+
+        <section id="use-cases" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Use cases</p>
+            <h2>Keep email replies inside the product that owns the context.</h2>
+          </div>
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Orders and invoices</strong>
+              <p>Attach a customer's answer to the order or invoice that prompted it.</p>
+            </div>
+            <div class="note">
+              <strong>Support and cases</strong>
+              <p>Turn the reply into a comment on the correct ticket or application case.</p>
+            </div>
+            <div class="note">
+              <strong>Documents</strong>
+              <p>Receive requested files against the right application, claim, or review.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="why" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Why reply routes</p>
+            <h2>Make correlation explicit instead of reconstructing it later.</h2>
+          </div>
+          <div class="docs-table" role="table" aria-label="Reply correlation comparison">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Without a route</span>
+              <span role="columnheader">With Linje</span>
+              <span role="columnheader">Result</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Parse subjects and threading headers</span>
+              <span role="cell">Correlate by recipient address</span>
+              <span role="cell">Stable application metadata</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Expose a business ID in the address</span>
+              <span role="cell">Use an opaque token</span>
+              <span role="cell">No identifier leakage</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Build inbound storage and delivery</span>
+              <span role="cell">Receive a signed, replayable webhook</span>
+              <span role="cell">Inspectable failure handling</span>
+            </div>
+          </div>
         </section>
 
         <section id="create" class="docs-section" data-reveal>
@@ -95,6 +148,9 @@
             <h2>The reply arrives with caller metadata.</h2>
           </div>
           <pre><code>POST https://app.example.com/linje/inbound
+x-linje-inbound-id: ...
+x-linje-delivery-id: ...
+x-linje-timestamp: ...
 x-linje-signature: sha256=...
 
 {
@@ -126,7 +182,10 @@ x-linje-signature: sha256=...
   -d '{"active":false}' \
   https://api.linje.systems/v1/reply-routes/route_...</code></pre>
           <p>Disabled, expired, malformed, and unknown routes do not reach the target inbox webhook and do not expose caller metadata.</p>
-          <p>Route listings use <code>next-cursor</code> pagination. Disabled and expired routes can be removed after the configured retention window; Linje retains only a minimal hash tombstone.</p>
+          <p>Route listings accept <code>inbox-id</code>, <code>cursor</code>, and <code>limit</code>. The default page size is 100 and the maximum is 500. Responses use <code>next-cursor</code> pagination.</p>
+          <p>The complete address is returned only on creation and exact idempotent retries, so store it when you create the route. Metadata is immutable and limited to 16 KiB.</p>
+          <p>Disabled and expired routes can be removed after the configured retention window; Linje retains only a minimal hash tombstone.</p>
+          <p><a href="https://api.linje.systems/v1/openapi.json">Inspect the complete OpenAPI 3.1 contract.</a></p>
         </section>
 
         <section id="boundary" class="docs-section" data-reveal>

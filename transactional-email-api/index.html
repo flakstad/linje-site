@@ -32,6 +32,7 @@
         <a href="../index.html">Home</a>
         <a href="../docs/">Docs</a>
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
@@ -45,6 +46,7 @@
         <a href="#request">Request</a>
         <a href="#semantics">Semantics</a>
         <a href="#events">Events</a>
+        <a href="#replies">Replies</a>
       </aside>
 
       <article class="docs-main">
@@ -67,7 +69,7 @@
   -H "content-type: application/json" \
   -d '{
     "idempotency-key":"welcome-user-123",
-    "from":"no-reply@tx.example.com",
+    "from":"orders@tx.example.com",
     "to":["person@example.net"],
     "subject":"Welcome",
     "text":"Welcome to Example.",
@@ -114,6 +116,19 @@
             Projects can receive outbound event webhooks for accepted, delivered, bounced, and dead
             messages. Webhook delivery is signed, retryable, and replayable.
           </p>
+        </section>
+
+        <section id="replies" class="docs-section" data-reveal>
+          <div class="section-heading">
+            <p class="eyebrow">Make it replyable</p>
+            <h2>Send a Reply-To that points back to your application object.</h2>
+          </div>
+          <p>
+            Generate an opaque address for an order, ticket, invoice, or other object and use it as
+            the outbound message's Reply-To. When the recipient replies, Linje delivers the email
+            and your immutable metadata to a signed inbox webhook.
+          </p>
+          <p><a href="../reply-by-email-api/">Read the reply-by-email guide.</a></p>
         </section>
       </article>
     </main>

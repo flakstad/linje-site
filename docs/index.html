@@ -33,6 +33,7 @@
         <a href="../index.html">Home</a>
         <a href="../docs/">Docs</a>
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
@@ -389,6 +390,10 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
             <p class="eyebrow">Reference</p>
             <h2>Key endpoints.</h2>
           </div>
+          <p>
+            The complete machine-readable contract is available as
+            <a href="https://api.linje.systems/v1/openapi.json">OpenAPI 3.1 JSON</a>.
+          </p>
 
           <div class="docs-table" role="table" aria-label="Key API endpoints">
             <div class="docs-row docs-head" role="row">
@@ -430,6 +435,11 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
               <strong role="cell">GET</strong>
               <code role="cell">/v1/reply-routes</code>
               <span role="cell">List one project's reply routes</span>
+            </div>
+            <div class="docs-row" role="row">
+              <strong role="cell">GET</strong>
+              <code role="cell">/v1/reply-routes/:id</code>
+              <span role="cell">Inspect one reply route</span>
             </div>
             <div class="docs-row" role="row">
               <strong role="cell">PATCH</strong>
