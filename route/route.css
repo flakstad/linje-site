@@ -1,6 +1,6 @@
 :root {
-  --paper: #e9f0f4;
-  --paper-2: #f7fafc;
+  --paper: #ffffff;
+  --paper-2: #ffffff;
   --ink: #14232d;
   --muted: #536773;
   --line: rgba(20, 35, 45, 0.14);
@@ -13,6 +13,8 @@
 
 * {
   box-sizing: border-box;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 html,
@@ -23,9 +25,7 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(23, 109, 137, 0.15), transparent 26rem),
-    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  background: var(--paper);
   color: var(--ink);
   font-family: "Instrument Sans", sans-serif;
   overflow-x: hidden;
@@ -39,9 +39,7 @@ a {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background:
-    linear-gradient(135deg, transparent 0 14%, rgba(255, 106, 61, 0.08) 14% 16%, transparent 16% 100%),
-    linear-gradient(45deg, transparent 0 76%, rgba(29, 103, 255, 0.08) 76% 78%, transparent 78% 100%);
+  background: repeating-linear-gradient(180deg, transparent 0 63px, rgba(23, 109, 137, 0.04) 63px 64px);
 }
 
 .poster-bar,

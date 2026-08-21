@@ -1,36 +1,22 @@
 :root {
-  color-scheme: light dark;
-  --bg: #f3f6f8;
-  --bg-2: #e6edf2;
-  --ink: #17232d;
-  --muted: #61717e;
-  --line: rgba(32, 62, 78, 0.16);
-  --line-strong: rgba(20, 103, 132, 0.38);
-  --accent: #176d89;
-  --accent-2: #466f80;
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-2: #f4f7f9;
+  --ink: #14232b;
+  --muted: #667781;
+  --line: #dce4e8;
+  --line-strong: #9db6c2;
+  --accent: #086f9f;
+  --accent-2: #245c73;
   --accent-3: #7065a8;
-  --danger: #b64242;
+  --danger: #b43b45;
   --button-ink: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0e161c;
-    --bg-2: #17232c;
-    --ink: #edf4f7;
-    --muted: #9aabb6;
-    --line: rgba(190, 215, 227, 0.16);
-    --line-strong: rgba(83, 170, 202, 0.4);
-    --accent: #66bdd8;
-    --accent-2: #93b9c8;
-    --accent-3: #aaa1e3;
-    --danger: #ff8585;
-    --button-ink: #0b1c23;
-  }
 }
 
 * {
   box-sizing: border-box;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 html,
@@ -41,8 +27,7 @@ body {
 }
 
 body {
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--bg-2) 72%, var(--bg)) 0%, var(--bg) 32rem);
+  background: var(--bg);
   color: var(--ink);
   font-family: "Manrope", sans-serif;
   overflow-x: hidden;
@@ -56,12 +41,9 @@ a {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--line) 54%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--line) 54%, transparent) 1px, transparent 1px);
-  background-size: 4.6rem 4.6rem;
-  opacity: 0.45;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 70%);
+  background-image: repeating-linear-gradient(180deg, transparent 0 63px, rgba(8, 111, 159, 0.04) 63px 64px);
+  opacity: 1;
+  mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.72) 18%, rgba(0, 0, 0, 0.72) 82%, transparent);
 }
 
 .concept-bar,

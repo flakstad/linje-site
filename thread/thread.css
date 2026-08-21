@@ -1,5 +1,5 @@
 :root {
-  --paper: #f3f6f8;
+  --paper: #ffffff;
   --paper-2: #ffffff;
   --ink: #17232d;
   --muted: #61717e;
@@ -8,11 +8,13 @@
   --accent: #176d89;
   --accent-2: #7065a8;
   --danger: #b64242;
-  --shadow: 0 18px 40px rgba(20, 45, 60, 0.08);
+  --shadow: none;
 }
 
 * {
   box-sizing: border-box;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 html,
@@ -23,9 +25,7 @@ body {
 }
 
 body {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0)),
-    linear-gradient(180deg, #e6edf2 0%, #f7fafc 100%);
+  background: var(--paper);
   color: var(--ink);
   font-family: "Public Sans", sans-serif;
 }
