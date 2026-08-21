@@ -45,36 +45,6 @@
     }).catch(function () {});
   }
 
-  function attachRevealObserver() {
-    var nodes = document.querySelectorAll("[data-reveal]");
-    if (!nodes.length) return;
-
-    if (!("IntersectionObserver" in window)) {
-      nodes.forEach(function (node) {
-        node.classList.add("is-visible");
-      });
-      return;
-    }
-
-    document.documentElement.classList.add("reveal-ready");
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-
-    nodes.forEach(function (node) {
-      observer.observe(node);
-    });
-  }
-
   function attachCtaTracking() {
     document.querySelectorAll("[data-track]").forEach(function (el) {
       el.addEventListener("click", function () {
@@ -86,6 +56,5 @@
     });
   }
 
-  attachRevealObserver();
   attachCtaTracking();
 })();

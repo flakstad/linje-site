@@ -47,13 +47,13 @@
       </aside>
 
       <article class="docs-main">
-        <section id="overview" class="docs-hero" data-reveal>
+        <section id="overview" class="docs-hero">
           <p class="eyebrow">Reply by Email API</p>
           <h1>Let customers reply. Deliver the answer to the right object.</h1>
           <p class="subhead">Give an order, ticket, invoice, or application object an opaque Reply-To address. When the customer replies normally, Linje sends the email and your metadata to a signed inbox webhook.</p>
         </section>
 
-        <section id="use-cases" class="docs-section" data-reveal>
+        <section id="use-cases" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Use cases</p>
             <h2>Keep email replies inside the product that owns the context.</h2>
@@ -74,7 +74,7 @@
           </div>
         </section>
 
-        <section id="why" class="docs-section" data-reveal>
+        <section id="why" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Why reply routes</p>
             <h2>Make correlation explicit instead of reconstructing it later.</h2>
@@ -103,7 +103,7 @@
           </div>
         </section>
 
-        <section id="create" class="docs-section" data-reveal>
+        <section id="create" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Route</p>
             <h2>Create a project-scoped reply address.</h2>
@@ -128,7 +128,7 @@
           <p>Use a fresh UUIDv4 as the idempotency key for each logical route. Concurrent and sequential exact retries return the same route and address; conflicting reuse returns 409. After retention cleanup, a retry returns 410 so a purged address cannot be revived or rebound.</p>
         </section>
 
-        <section id="send" class="docs-section" data-reveal>
+        <section id="send" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Outbound</p>
             <h2>Use the generated address as Reply-To.</h2>
@@ -142,7 +142,7 @@
 }</code></pre>
         </section>
 
-        <section id="payload" class="docs-section" data-reveal>
+        <section id="payload" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Inbound</p>
             <h2>The reply arrives with caller metadata.</h2>
@@ -171,7 +171,7 @@ x-linje-signature: sha256=...
 }</code></pre>
         </section>
 
-        <section id="lifecycle" class="docs-section" data-reveal>
+        <section id="lifecycle" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Lifecycle</p>
             <h2>Expire or disable addresses without changing metadata.</h2>
@@ -188,7 +188,7 @@ x-linje-signature: sha256=...
           <p><a href="https://api.linje.systems/v1/openapi.json">Inspect the complete OpenAPI 3.1 contract.</a></p>
         </section>
 
-        <section id="boundary" class="docs-section" data-reveal>
+        <section id="boundary" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Boundary</p>
             <h2>Correlation is not workflow.</h2>
