@@ -85,9 +85,7 @@ a {
   text-decoration: none;
 }
 
-.brand::before,
-.signal-hero h1::before,
-.docs-hero h1::before {
+.brand::before {
   content: "";
   display: block;
   flex: 0 0 auto;
@@ -96,12 +94,6 @@ a {
   background:
     radial-gradient(circle at right center, var(--accent) 0 3px, transparent 3.5px),
     linear-gradient(var(--accent), var(--accent)) left center / calc(100% - 5px) 1px no-repeat;
-}
-
-.signal-hero h1::before,
-.docs-hero h1::before {
-  margin-bottom: 0.9rem;
-  width: 3rem;
 }
 
 .site-nav {
@@ -142,9 +134,12 @@ a {
   border-top: 1px solid var(--line);
 }
 
-.signal-hero,
 .docs-hero {
   border-top: 2px solid var(--accent);
+}
+
+.signal-hero {
+  border-top: 0;
 }
 
 .signal-rails {
