@@ -1,14 +1,14 @@
 :root {
-  --paper: #fff0cf;
-  --paper-2: #fff7e7;
-  --ink: #111111;
-  --muted: #4e4a43;
-  --line: rgba(17, 17, 17, 0.14);
-  --orange: #ff6a3d;
-  --blue: #1d67ff;
-  --green: #1f9c63;
-  --yellow: #ffd02f;
-  --danger: #b73020;
+  --paper: #e9f0f4;
+  --paper-2: #f7fafc;
+  --ink: #14232d;
+  --muted: #536773;
+  --line: rgba(20, 35, 45, 0.14);
+  --orange: #db5e4b;
+  --blue: #176d89;
+  --green: #23775b;
+  --yellow: #7165a8;
+  --danger: #b64242;
 }
 
 * {
@@ -24,8 +24,8 @@ body {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(255, 208, 47, 0.26), transparent 26rem),
-    linear-gradient(180deg, #ffe7b8 0%, #fff2d8 100%);
+    radial-gradient(circle at top left, rgba(23, 109, 137, 0.15), transparent 26rem),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
   color: var(--ink);
   font-family: "Instrument Sans", sans-serif;
   overflow-x: hidden;
@@ -272,7 +272,7 @@ pre {
   overflow: auto;
   border: 1px solid rgba(17, 17, 17, 0.14);
   background: rgba(17, 17, 17, 0.94);
-  color: #fff7dd;
+  color: #f7fafc;
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.86rem;
 }

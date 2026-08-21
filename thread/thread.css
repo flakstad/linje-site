@@ -1,14 +1,14 @@
 :root {
-  --paper: #f7f6f1;
+  --paper: #f3f6f8;
   --paper-2: #ffffff;
-  --ink: #16202b;
-  --muted: #5d6973;
-  --line: rgba(22, 32, 43, 0.12);
-  --line-strong: rgba(22, 32, 43, 0.24);
-  --accent: #0c6b61;
-  --accent-2: #213c89;
-  --danger: #b0332a;
-  --shadow: 0 18px 40px rgba(19, 31, 40, 0.08);
+  --ink: #17232d;
+  --muted: #61717e;
+  --line: rgba(32, 62, 78, 0.13);
+  --line-strong: rgba(32, 62, 78, 0.26);
+  --accent: #176d89;
+  --accent-2: #7065a8;
+  --danger: #b64242;
+  --shadow: 0 18px 40px rgba(20, 45, 60, 0.08);
 }
 
 * {
@@ -25,7 +25,7 @@ body {
 body {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0)),
-    linear-gradient(180deg, #f3f2ec 0%, #faf8f3 100%);
+    linear-gradient(180deg, #e6edf2 0%, #f7fafc 100%);
   color: var(--ink);
   font-family: "Public Sans", sans-serif;
 }
@@ -235,7 +235,7 @@ h2 {
   border: 1px solid var(--line);
   border-radius: 22px;
   overflow: hidden;
-  background: #fcfcfb;
+  background: #f9fbfc;
 }
 
 .snippet-head {
