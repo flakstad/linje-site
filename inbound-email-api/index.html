@@ -3,17 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Inbound Email Webhooks | Linje</title>
+    <title>Inbound Email API for Developers | Linje</title>
     <meta
       name="description"
-      content="Receive inbound email as signed JSON webhooks with attachments, retries, replay, and inspection."
+      content="Receive inbound email, replies, and attachments through a developer API with signed webhooks, durable storage, retries, and replay."
     />
-    <meta property="og:title" content="Inbound Email Webhooks | Linje" />
-    <meta property="og:description" content="Receive inbound email and attachments as signed JSON webhooks with replayable delivery." />
+    <meta property="og:title" content="Inbound Email API for Developers | Linje" />
+    <meta
+      property="og:description"
+      content="Turn inbound email into signed, inspectable, replayable application events."
+    />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://linje.systems/inbound-email-webhook/" />
+    <meta property="og:url" content="https://linje.systems/inbound-email-api/" />
     <meta name="twitter:card" content="summary" />
-    <link rel="canonical" href="https://linje.systems/inbound-email-webhook/" />
+    <link rel="canonical" href="https://linje.systems/inbound-email-api/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,7 +27,7 @@
     <link rel="stylesheet" href="../styles.css" />
     <link rel="stylesheet" href="../docs/docs.css" />
   </head>
-  <body class="docs-page" data-surface="inbound-email-webhook">
+  <body class="docs-page" data-surface="inbound-email-api">
     <div class="signal-grid" aria-hidden="true"></div>
     <header class="concept-bar docs-bar">
       <a class="brand" href="../index.html">Linje</a>
@@ -44,41 +47,46 @@
         <p class="eyebrow">Guide</p>
         <a href="#overview">Overview</a>
         <a href="#create">Create inbox</a>
-        <a href="#payload">Payload</a>
-        <a href="#verify">Verify</a>
+        <a href="#event">Receive event</a>
+        <a href="#replies">Correlate replies</a>
+        <a href="#reliability">Reliability</a>
+        <a href="#boundary">Boundary</a>
         <a href="#start">Start</a>
       </aside>
 
       <article class="docs-main">
         <section id="overview" class="docs-hero">
-          <p class="eyebrow">Inbound Email Webhooks</p>
-          <h1>Receive email inside your application.</h1>
+          <p class="eyebrow">Inbound Email API</p>
+          <h1>An inbound email API for application workflows.</h1>
           <p class="subhead">
-            Provision inboxes, receive inbound email as signed webhooks, download attachments, and
-            replay delivery when your endpoint fails.
+            Give your software an address. Linje receives messages, replies, and attachments,
+            stores the original artifacts, and delivers a signed JSON event to your webhook.
           </p>
         </section>
 
         <section id="create" class="docs-section">
           <div class="section-heading">
-            <p class="eyebrow">Inbox</p>
-            <h2>Create or update an inbound address.</h2>
+            <p class="eyebrow">Inbox API</p>
+            <h2>Provision an address for an application boundary.</h2>
           </div>
           <pre><code>curl -fsS \
   -X POST \
   -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
   -H "content-type: application/json" \
   -d '{
-    "id":"support",
+    "id":"documents",
     "webhook-url":"https://app.example.com/linje/inbound"
   }' \
   https://api.linje.systems/v1/inboxes</code></pre>
+          <p>
+            Send mail directly to the provisioned address or forward an existing address into it.
+          </p>
         </section>
 
-        <section id="payload" class="docs-section">
+        <section id="event" class="docs-section">
           <div class="section-heading">
-            <p class="eyebrow">Webhook</p>
-            <h2>Linje posts a stable envelope to your endpoint.</h2>
+            <p class="eyebrow">Email to HTTP</p>
+            <h2>Receive the message and its attachments as one stable event.</h2>
           </div>
           <pre><code>POST https://app.example.com/linje/inbound
 x-linje-inbound-id: ...
@@ -89,42 +97,69 @@ x-linje-signature: sha256=...
 {
   "schema":"linje.inbound-email.v1",
   "event-id":"...",
-  "inbound-id":"...",
-  "inbox-id":"support",
+  "inbox-id":"documents",
   "email": {
     "from":[{"email":"customer@example.com"}],
-    "subject":"Need help",
-    "in-reply-to":[],
-    "references":[]
+    "subject":"Requested document"
   },
+  "content":{"text":"Attached."},
   "attachments":[
     {"download":{"url":"https://api.linje.systems/..."}}
   ]
 }</code></pre>
+          <p>
+            <a href="../inbound-email-webhook/">Read about webhook verification and delivery.</a>
+          </p>
         </section>
 
-        <section id="verify" class="docs-section">
+        <section id="replies" class="docs-section">
           <div class="section-heading">
-            <p class="eyebrow">Signatures</p>
-            <h2>Verify against raw request body bytes.</h2>
+            <p class="eyebrow">Durable context</p>
+            <h2>Make a reply addressable to an application object.</h2>
           </div>
-          <pre><code>expected = HMAC_SHA256(secret, timestamp + "." + raw_body)
-x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
           <p>
-            Webhook delivery is at least once. Use the payload event id or inbound id to dedupe.
+            Create an opaque Reply-To address with immutable caller metadata. When the recipient
+            replies, the inbound event includes the route and the context your application needs
+            to find the right claim, order, case, or workflow.
+          </p>
+          <p>
+            <a href="../reply-by-email-api/">See object-correlated reply routing.</a>
+          </p>
+        </section>
+
+        <section id="reliability" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Reliable delivery</p>
+            <h2>Store first. Sign, retry, inspect, and replay.</h2>
+          </div>
+          <p>
+            Linje stores the raw RFC822 message and attachments before callback delivery. Webhooks
+            are HMAC-signed and delivered at least once with automatic retry and an inspectable
+            attempt history. Replay redelivers the same email event.
+          </p>
+        </section>
+
+        <section id="boundary" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Product boundary</p>
+            <h2>Email infrastructure, not workflow automation.</h2>
+          </div>
+          <p>
+            Linje delivers normalized email facts and durable artifacts. Your application owns
+            extraction, triage, approvals, and every other business decision.
           </p>
         </section>
 
         <section id="start" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Next step</p>
-            <h2>Deliver one inbound email to your webhook.</h2>
+            <h2>Test one production-like inbound flow.</h2>
           </div>
           <p>
-            <a class="button button-primary" href="../request-access/" data-track="cta_inbound_webhook_access"
+            <a class="button button-primary" href="../request-access/" data-track="cta_inbound_api_access"
               >Request access</a
             >
-            <a class="button button-ghost" href="../docs/" data-track="cta_inbound_webhook_docs"
+            <a class="button button-ghost" href="../docs/" data-track="cta_inbound_api_docs"
               >Read the API docs</a
             >
           </p>
@@ -137,6 +172,7 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
       <div>
         <a href="../docs/">Docs</a>
         <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-webhook/">Inbound webhooks</a>
         <a href="../email-to-webhook/">Email to webhook</a>
         <a href="../reply-by-email-api/">Replies</a>
         <a href="../webhook-replay/">Replay</a>

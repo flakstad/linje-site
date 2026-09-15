@@ -13,6 +13,9 @@
     <loc>https://linje.systems/transactional-email-api/</loc>
   </url>
   <url>
+    <loc>https://linje.systems/inbound-email-api/</loc>
+  </url>
+  <url>
     <loc>https://linje.systems/inbound-email-webhook/</loc>
   </url>
   <url>

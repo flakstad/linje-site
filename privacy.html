@@ -15,13 +15,13 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="legal-page">
+  <body class="legal-page" data-surface="privacy">
     <header class="concept-bar docs-bar">
       <a class="brand" href="index.html">Linje</a>
       <nav class="site-nav" aria-label="Top navigation">
         <a href="index.html">Home</a>
         <a href="docs/">Docs</a>
-        <a href="inbound-email-webhook/">Inbound webhooks</a>
+        <a href="inbound-email-api/">Inbound email</a>
         <a href="reply-by-email-api/">Replies</a>
         <a href="pricing/">Pricing</a>
         <a href="request-access/">Request access</a>
@@ -34,8 +34,21 @@
       <h1>Access-request data is only used to provision Linje.</h1>
       <p>
         When you request access by email, Linje uses the information you send to respond and
-        provision access to the portal and project setup flow. The public site may also collect
-        basic, non-sensitive page analytics when analytics are configured.
+        provision access to the portal and project setup flow.
+      </p>
+      <p>
+        When analytics are configured, the public site records page views, the market surface that
+        led to the visit, campaign parameters, and explicit call-to-action clicks. Session replay
+        and automatic interaction capture are disabled. Query strings are removed from captured
+        page and referrer URLs, IP addresses are discarded, and Linje does not send email
+        addresses, message contents, attachment names, or application metadata to public-site
+        analytics.
+      </p>
+      <p>
+        PostHog runs in cookieless mode. A first-visit surface and campaign may be stored only for
+        the current browser-tab session so a later access request can be attributed to the page
+        that introduced Linje. Google Search Console provides aggregate search-query and
+        page-performance data for the site.
       </p>
       <p>
         To request removal of access-request data, email
@@ -49,5 +62,7 @@
         <a href="https://api.linje.systems/portal/login">Sign in</a>
       </div>
     </main>
+    <script src="site-config.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

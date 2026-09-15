@@ -18,9 +18,51 @@ python3 -m http.server 8787
 
 ## Configuration
 
-Edit `site-config.js`:
+`site-config.js` is safe to load when analytics are not configured. Local previews remain a no-op
+and log a clear warning. Supported values:
 
 - `analyticsEndpoint`: optional endpoint for conversion events
+- `posthogKey`: PostHog project token, injected during the Pages build
+- `posthogHost`: PostHog ingest host; defaults to EU Cloud
+- `posthogDebug`: enable PostHog debug output locally
+
+The Pages workflow reads these GitHub repository variables:
+
+- `LINJE_POSTHOG_KEY` — the public project token from a dedicated Linje PostHog project
+- `LINJE_POSTHOG_HOST` — optional; defaults to `https://eu.i.posthog.com`
+
+Do not reuse a PostHog project belonging to another product. The current CLI context points at a
+Fangst/andreasflakstad.no project and must not receive Linje events.
+
+The public site captures:
+
+- automatic `$pageview` and `$pageleave` events
+- `cta_click` for elements with `data-track`
+- `access_request_started` when the visitor opens the email access flow
+
+Every event carries `surface`, `first_surface`, and first-touch UTM properties. The integration
+uses PostHog's always-on cookieless mode, disables autocapture and session replay, does not create
+person profiles, strips query strings from captured URLs, and sends `$ip: null`. First-touch values
+live only in the browser tab's session storage. Do not add email addresses, form contents, message
+bodies, attachment names, or application metadata to event properties.
+
+Enable **Cookieless server hash mode** under PostHog project settings before setting the token;
+PostHog ignores cookieless events when the project-side setting is disabled.
+
+## Google Search Console
+
+The repository already exposes `robots.txt` and `sitemap.xml`. Complete the external setup after
+deployment:
+
+1. Create a **Domain property** for `linje.systems` in Google Search Console.
+2. Add Google's verification TXT record to DNS and verify the property.
+3. Submit `https://linje.systems/sitemap.xml`.
+4. Inspect the five market-surface URLs and request indexing if Google has not discovered them.
+5. Use query, page, and country reports as the acquisition layer; use PostHog for on-site CTA and
+   access-flow behavior.
+
+DNS verification and Search Console property creation are external production changes and are not
+performed by this repository.
 
 ## Deploy (GitHub Pages)
 

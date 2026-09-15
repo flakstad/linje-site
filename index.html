@@ -26,7 +26,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-variant="signal">
+  <body data-variant="signal" data-surface="home">
     <div class="signal-grid" aria-hidden="true"></div>
 
     <header class="concept-bar docs-bar">
@@ -34,7 +34,7 @@
       <nav class="site-nav" aria-label="Top navigation">
         <a href="index.html">Home</a>
         <a href="docs/index.html">Docs</a>
-        <a href="inbound-email-webhook/">Inbound webhooks</a>
+        <a href="inbound-email-api/">Inbound email</a>
         <a href="reply-by-email-api/">Replies</a>
         <a href="pricing/">Pricing</a>
         <a href="request-access/">Request access</a>
@@ -212,6 +212,10 @@ WEBHOOK
         </div>
 
         <div class="seo-links" aria-label="Focused Linje guides">
+          <a href="inbound-email-api/">
+            <strong>Inbound Email API</strong>
+            <span>Receive messages, replies, and attachments inside your application.</span>
+          </a>
           <a href="transactional-email-api/">
             <strong>Transactional Email API</strong>
             <span>Send the product messages users expect to receive.</span>
@@ -293,6 +297,8 @@ WEBHOOK
               href="mailto:hello@linje.systems?subject=Linje%20access"
               class="button button-primary"
               data-track="cta_signal_email"
+              data-event="access_request_started"
+              data-access-context
               >Email hello@linje.systems</a
             >
             <a href="docs/index.html" class="button button-ghost" data-track="cta_signal_docs_closed"
@@ -314,6 +320,7 @@ WEBHOOK
       <div>
         <a href="docs/index.html">Docs</a>
         <a href="transactional-email-api/">Transactional email</a>
+        <a href="inbound-email-api/">Inbound email API</a>
         <a href="inbound-email-webhook/">Inbound webhooks</a>
         <a href="email-to-webhook/">Email to webhook</a>
         <a href="reply-by-email-api/">Replies</a>

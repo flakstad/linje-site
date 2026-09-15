@@ -27,6 +27,21 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Configure PostHog
+        env:
+          LINJE_POSTHOG_KEY: ${{ vars.LINJE_POSTHOG_KEY }}
+          LINJE_POSTHOG_HOST: ${{ vars.LINJE_POSTHOG_HOST }}
+        run: |
+          if [ -z "$LINJE_POSTHOG_KEY" ]; then
+            echo "LINJE_POSTHOG_KEY is not configured; analytics will remain disabled."
+            exit 0
+          fi
+          posthog_host="${LINJE_POSTHOG_HOST:-https://eu.i.posthog.com}"
+          sed -i \
+            -e "s|posthogKey: \"\"|posthogKey: \"$LINJE_POSTHOG_KEY\"|" \
+            -e "s|posthogHost: \"https://eu.i.posthog.com\"|posthogHost: \"$posthog_host\"|" \
+            site-config.js
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

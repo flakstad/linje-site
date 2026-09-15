@@ -24,14 +24,14 @@
     <link rel="stylesheet" href="../styles.css" />
     <link rel="stylesheet" href="../docs/docs.css" />
   </head>
-  <body class="docs-page" data-variant="request-access">
+  <body class="docs-page" data-variant="request-access" data-surface="request-access">
     <div class="signal-grid" aria-hidden="true"></div>
     <header class="concept-bar docs-bar">
       <a class="brand" href="../index.html">Linje</a>
       <nav class="site-nav" aria-label="Top navigation">
         <a href="../index.html">Home</a>
         <a href="../docs/">Docs</a>
-        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../inbound-email-api/">Inbound email</a>
         <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
@@ -61,6 +61,8 @@
               class="button button-primary"
               href="mailto:hello@linje.systems?subject=Linje%20access"
               data-track="cta_request_access_email"
+              data-event="access_request_started"
+              data-access-context
               >Email hello@linje.systems</a
             >
             <a
@@ -89,6 +91,7 @@
       </div>
     </footer>
 
+    <script src="../site-config.js"></script>
     <script src="../app.js"></script>
   </body>
 </html>

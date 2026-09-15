@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reply by Email API | Linje</title>
-    <meta name="description" content="Generate opaque Reply-To addresses and receive customer replies as signed webhooks with application metadata." />
-    <meta property="og:title" content="Reply by Email API | Linje" />
-    <meta property="og:description" content="Generate opaque Reply-To addresses and turn human replies into correlated application events." />
+    <title>Email Reply Routing API with Application Context | Linje</title>
+    <meta name="description" content="Give each order, claim, case, or workflow an opaque Reply-To address. Receive replies and attachments as signed, correlated, replayable events." />
+    <meta property="og:title" content="Email Reply Routing API with Application Context | Linje" />
+    <meta property="og:description" content="Let customers reply by email without losing application context. Keep your current outbound provider." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://linje.systems/reply-by-email-api/" />
     <meta name="twitter:card" content="summary" />
@@ -18,14 +18,14 @@
     <link rel="stylesheet" href="../styles.css" />
     <link rel="stylesheet" href="../docs/docs.css" />
   </head>
-  <body class="docs-page">
+  <body class="docs-page" data-surface="reply-by-email-api">
     <div class="signal-grid" aria-hidden="true"></div>
     <header class="concept-bar docs-bar">
       <a class="brand" href="../index.html">Linje</a>
       <nav class="site-nav" aria-label="Top navigation">
         <a href="../index.html">Home</a>
         <a href="../docs/">Docs</a>
-        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../inbound-email-api/">Inbound email</a>
         <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
@@ -37,6 +37,7 @@
       <aside class="docs-nav">
         <p class="eyebrow">Guide</p>
         <a href="#overview">Overview</a>
+        <a href="#sidecar">Keep your provider</a>
         <a href="#use-cases">Use cases</a>
         <a href="#why">Why routes</a>
         <a href="#create">Create route</a>
@@ -44,13 +45,27 @@
         <a href="#payload">Receive reply</a>
         <a href="#lifecycle">Lifecycle</a>
         <a href="#boundary">Boundary</a>
+        <a href="#pilot">Pilot</a>
       </aside>
 
       <article class="docs-main">
         <section id="overview" class="docs-hero">
           <p class="eyebrow">Reply by Email API</p>
-          <h1>Let customers reply. Deliver the answer to the right object.</h1>
-          <p class="subhead">Give an order, ticket, invoice, or application object an opaque Reply-To address. When the customer replies normally, Linje sends the email and your metadata to a signed inbox webhook.</p>
+          <h1>Let customers reply by email without losing application context.</h1>
+          <p class="subhead">Give each order, claim, case, or workflow an opaque Reply-To address. When someone replies, Linje sends your application a signed event containing the original context, message content, and attachments.</p>
+        </section>
+
+        <section id="sidecar" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Reply sidecar</p>
+            <h2>Keep your current outbound provider.</h2>
+          </div>
+          <p>
+            Continue sending through Resend, Postmark, SES, or your existing email stack. Put the
+            Linje-generated address in <code>Reply-To</code>; Linje handles the inbound reply,
+            correlation, signed delivery, retries, and replay. Moving outbound email to Linje is
+            optional.
+          </p>
         </section>
 
         <section id="use-cases" class="docs-section">
@@ -60,8 +75,8 @@
           </div>
           <div class="inline-notes">
             <div class="note">
-              <strong>Orders and invoices</strong>
-              <p>Attach a customer's answer to the order or invoice that prompted it.</p>
+              <strong>Claims and orders</strong>
+              <p>Attach a customer's answer to the claim or order that prompted it.</p>
             </div>
             <div class="note">
               <strong>Support and cases</strong>
@@ -113,15 +128,21 @@
   -H "Idempotency-Key: 018f47d2-89ab-4cde-8123-456789abcdef" \
   -H "content-type: application/json" \
   -d '{
-    "inbox-id":"orders",
-    "metadata":{"order-id":"order_82921"}
+    "inbox-id":"claims",
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    }
   }' \
   https://api.linje.systems/v1/reply-routes</code></pre>
           <pre><code>{
   "reply-route": {
     "id":"route_...",
     "address":"r+012345...@in.linje.systems",
-    "metadata":{"order-id":"order_82921"},
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    },
     "active":true
   }
 }</code></pre>
@@ -133,13 +154,14 @@
             <p class="eyebrow">Outbound</p>
             <h2>Use the generated address as Reply-To.</h2>
           </div>
-          <pre><code>POST /v1/messages
-{
-  "from":"orders@tx.example.com",
-  "to":["customer@example.com"],
-  "reply-to":["r+012345...@in.linje.systems"],
-  "subject":"Your order"
-}</code></pre>
+          <pre><code>From: claims@example.com
+To: customer@example.com
+Reply-To: r+012345...@in.linje.systems
+Subject: Claim claim_123</code></pre>
+          <p>
+            These are ordinary email headers. The message can be sent through Linje or another
+            transactional email provider.
+          </p>
         </section>
 
         <section id="payload" class="docs-section">
@@ -156,10 +178,13 @@ x-linje-signature: sha256=...
 {
   "schema":"linje.inbound-email.v1",
   "inbound-id":"...",
-  "inbox-id":"orders",
+  "inbox-id":"claims",
   "route": {
     "id":"route_...",
-    "metadata":{"order-id":"order_82921"}
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    }
   },
   "email": {
     "from":[{"email":"customer@example.com"}],
@@ -167,7 +192,13 @@ x-linje-signature: sha256=...
     "in-reply-to":["&lt;linje...@tx.example.com&gt;"],
     "references":[]
   },
-  "content":{"text":"Can you change the address?"}
+  "content":{"text":"The requested photo is attached."},
+  "attachments":[
+    {
+      "filename":"photo.pdf",
+      "download":{"url":"https://api.linje.systems/..."}
+    }
+  ]
 }</code></pre>
         </section>
 
@@ -195,6 +226,25 @@ x-linje-signature: sha256=...
           </div>
           <p>Linje tells your application which route received the email. Your application decides whether the message updates an order, creates a comment, or does nothing. Linje does not become a helpdesk, rules engine, or shared inbox.</p>
         </section>
+
+        <section id="pilot" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Production-like test</p>
+            <h2>Route one real reply back to the right object.</h2>
+          </div>
+          <p>
+            Keep your outbound provider, create one reply route, and verify that text and an
+            attachment reach the correct application object through a signed webhook.
+          </p>
+          <p>
+            <a class="button button-primary" href="../request-access/" data-track="cta_reply_pilot"
+              >Pilot reply routing</a
+            >
+            <a class="button button-ghost" href="../docs/" data-track="cta_reply_docs"
+              >Read the API docs</a
+            >
+          </p>
+        </section>
       </article>
     </main>
 
@@ -212,6 +262,7 @@ x-linje-signature: sha256=...
         <a href="../privacy.html">Privacy</a>
       </div>
     </footer>
+    <script src="../site-config.js"></script>
     <script src="../app.js"></script>
   </body>
 </html>

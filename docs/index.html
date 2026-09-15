@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="../styles.css" />
     <link rel="stylesheet" href="docs.css" />
   </head>
-  <body class="docs-page">
+  <body class="docs-page" data-surface="docs">
     <div class="signal-grid" aria-hidden="true"></div>
 
     <header class="concept-bar docs-bar">
@@ -32,7 +32,7 @@
       <nav class="site-nav" aria-label="Top navigation">
         <a href="../index.html">Home</a>
         <a href="../docs/">Docs</a>
-        <a href="../inbound-email-webhook/">Inbound webhooks</a>
+        <a href="../inbound-email-api/">Inbound email</a>
         <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
         <a href="../request-access/">Request access</a>
@@ -163,6 +163,10 @@
           </div>
 
           <div class="quickstart-grid">
+            <a href="../inbound-email-api/">
+              <strong>Use the inbound email API</strong>
+              <span>Receive messages, replies, and attachments as application events.</span>
+            </a>
             <a href="../transactional-email-api/">
               <strong>Send transactional email</strong>
               <span>Use <code>POST /v1/messages</code> with a project token.</span>
@@ -476,6 +480,7 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
       <div>
         <a href="../index.html">Home</a>
         <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-api/">Inbound email API</a>
         <a href="../inbound-email-webhook/">Inbound webhooks</a>
         <a href="../email-to-webhook/">Email to webhook</a>
         <a href="../reply-by-email-api/">Replies</a>
@@ -487,6 +492,7 @@ x-linje-signature = "sha256=&lt;hex&gt;"</code></pre>
       </div>
     </footer>
 
+    <script src="../site-config.js"></script>
     <script src="../app.js"></script>
   </body>
 </html>
