@@ -28,18 +28,18 @@ and log a clear warning. Supported values:
 
 The Pages workflow reads these GitHub repository variables:
 
-- `LINJE_POSTHOG_KEY` — the public project token from a dedicated Linje PostHog project
+- `LINJE_POSTHOG_KEY` — the public project token for the shared PostHog project
 - `LINJE_POSTHOG_HOST` — optional; defaults to `https://eu.i.posthog.com`
 
-Do not reuse a PostHog project belonging to another product. The current CLI context points at a
-Fangst/andreasflakstad.no project and must not receive Linje events.
+Linje may share the PostHog project with other products. Its custom events use a `linje.` namespace,
+and every event carries `product: "linje"`, so funnels and dashboards can isolate Linje traffic.
 
 The public site captures:
 
 - automatic `$pageview` and `$pageleave` events
-- `landing_view` as the stable first step in the commercial funnel
-- `cta_click` for elements with `data-track`
-- `signup_started` when the visitor follows a self-service CTA
+- `linje.landing_viewed` as the stable first step in the commercial funnel
+- `linje.cta_clicked` for elements with `data-track`
+- `linje.signup_started` when the visitor follows a self-service CTA
 
 Every event carries `surface`, `first_surface`, `entry_path`, and first-touch UTM properties. Portal
 links carry the same bounded attribution plus PostHog's opaque anonymous id through magic-link

@@ -67,6 +67,7 @@
   function analyticsContext(payload) {
     return Object.assign(
       {
+        product: "linje",
         variant: pageVariant,
         surface: surface,
         first_surface: firstSurface,
@@ -253,7 +254,7 @@
           destination_type: destinationType(el)
         };
 
-        sendAnalytics("cta_click", payload);
+        sendAnalytics("linje.cta_clicked", payload);
         if (el.getAttribute("data-event")) {
           sendAnalytics(el.getAttribute("data-event"), payload);
         }
@@ -318,7 +319,7 @@
 
   initPostHog();
   if (!storageGet("linje_analytics_landing_view_sent")) {
-    sendAnalytics("landing_view", { path: window.location.pathname });
+    sendAnalytics("linje.landing_viewed", { path: window.location.pathname });
     storageSet("linje_analytics_landing_view_sent", "1");
   }
   attachAccessContext();
