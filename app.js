@@ -48,9 +48,11 @@
   }
 
   var firstSurface = initialValue("first_surface", surface);
+  var entryPath = initialValue("entry_path", window.location.pathname);
   var initialUtmSource = initialValue("utm_source", queryValue("utm_source"));
   var initialUtmMedium = initialValue("utm_medium", queryValue("utm_medium"));
   var initialUtmCampaign = initialValue("utm_campaign", queryValue("utm_campaign"));
+  var posthogDistinctId = "";
 
   function cleanUrl(value) {
     if (!value) return value;
@@ -68,6 +70,7 @@
         variant: pageVariant,
         surface: surface,
         first_surface: firstSurface,
+        entry_path: entryPath,
         initial_utm_source: initialUtmSource,
         initial_utm_medium: initialUtmMedium,
         initial_utm_campaign: initialUtmCampaign,
@@ -192,6 +195,7 @@
       person_profiles: "never",
       before_send: sanitizePostHogEvent,
       loaded: function (posthog) {
+        posthogDistinctId = posthog.get_distinct_id() || "";
         if (config.posthogDebug) posthog.debug();
       }
     });
@@ -272,7 +276,52 @@
     });
   }
 
+  function portalContextUrl(href) {
+    try {
+      var url = new URL(href, window.location.origin);
+      if (
+        url.origin !== "https://api.linje.systems" ||
+        url.pathname !== "/portal/login"
+      ) {
+        return href;
+      }
+
+      var values = {
+        surface: surface,
+        first_surface: firstSurface,
+        entry_path: entryPath,
+        initial_utm_source: initialUtmSource,
+        initial_utm_medium: initialUtmMedium,
+        initial_utm_campaign: initialUtmCampaign,
+        ph_distinct_id: posthogDistinctId
+      };
+
+      Object.keys(values).forEach(function (key) {
+        if (values[key]) url.searchParams.set(key, values[key]);
+      });
+      return url.toString();
+    } catch (_) {
+      return href;
+    }
+  }
+
+  function attachPortalContext() {
+    document
+      .querySelectorAll('a[href^="https://api.linje.systems/portal/login"]')
+      .forEach(function (el) {
+        el.setAttribute("href", portalContextUrl(el.getAttribute("href") || ""));
+        el.addEventListener("click", function () {
+          el.setAttribute("href", portalContextUrl(el.getAttribute("href") || ""));
+        });
+      });
+  }
+
   initPostHog();
+  if (!storageGet("linje_analytics_landing_view_sent")) {
+    sendAnalytics("landing_view", { path: window.location.pathname });
+    storageSet("linje_analytics_landing_view_sent", "1");
+  }
   attachAccessContext();
+  attachPortalContext();
   attachCtaTracking();
 })();

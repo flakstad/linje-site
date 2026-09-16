@@ -28,7 +28,7 @@
         <a href="../inbound-email-api/">Inbound email</a>
         <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
-        <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="signup_started">Start free</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
       </nav>
     </header>
@@ -46,7 +46,7 @@
         <a href="#lifecycle">Lifecycle</a>
         <a href="#both-directions">Both directions</a>
         <a href="#boundary">Boundary</a>
-        <a href="#pilot">Pilot</a>
+        <a href="#start">Start</a>
       </aside>
 
       <article class="docs-main">
@@ -130,12 +130,20 @@
             <p class="eyebrow">Route</p>
             <h2>Create a project-scoped reply address.</h2>
           </div>
+          <h3>1. Create a generated inbox for your webhook</h3>
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "content-type: application/json" \
+  -d '{"webhook-url":"https://app.example.com/linje/inbound"}' \
+  https://api.linje.systems/v1/inboxes/provision</code></pre>
+          <p>Copy the returned <code>inbox.id</code> and store the one-time webhook secret.</p>
+          <h3>2. Create a reply route for one application object</h3>
           <pre><code>curl -fsS \
   -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
   -H "Idempotency-Key: 018f47d2-89ab-4cde-8123-456789abcdef" \
   -H "content-type: application/json" \
   -d '{
-    "inbox-id":"claims",
+    "inbox-id":"&lt;returned-inbox-id&gt;",
     "metadata":{
       "claim_id":"claim_123",
       "customer_id":"cus_17"
@@ -247,9 +255,9 @@ x-linje-signature: sha256=...
           <p>Linje tells your application which route received the email. Your application decides whether the message updates an order, creates a comment, or does nothing. Linje does not become a helpdesk, rules engine, or shared inbox.</p>
         </section>
 
-        <section id="pilot" class="docs-section">
+        <section id="start" class="docs-section">
           <div class="section-heading">
-            <p class="eyebrow">Production-like test</p>
+            <p class="eyebrow">Self-service quickstart</p>
             <h2>Route one real reply back to the right object.</h2>
           </div>
           <p>
@@ -257,7 +265,7 @@ x-linje-signature: sha256=...
             attachment reach the correct application object through a signed webhook.
           </p>
           <p>
-            <a class="button button-primary" href="../request-access/" data-track="cta_reply_pilot"
+            <a class="button button-primary" href="https://api.linje.systems/portal/login" data-track="cta_reply_start" data-event="signup_started"
               >Add replies to one real email flow</a
             >
             <a class="button button-ghost" href="../docs/" data-track="cta_reply_docs"
@@ -277,7 +285,7 @@ x-linje-signature: sha256=...
         <a href="../email-to-webhook/">Email to webhook</a>
         <a href="../webhook-replay/">Replay</a>
         <a href="../pricing/">Pricing</a>
-        <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="signup_started">Start free</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
         <a href="../privacy.html">Privacy</a>
       </div>

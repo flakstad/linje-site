@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Linje | Privacy</title>
-    <meta name="description" content="How Linje handles access-request information and public-site analytics." />
+    <meta name="description" content="How Linje handles account information, acquisition attribution, and public-site analytics." />
     <link rel="canonical" href="https://linje.systems/privacy.html" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,17 +24,17 @@
         <a href="inbound-email-api/">Inbound email</a>
         <a href="reply-by-email-api/">Replies</a>
         <a href="pricing/">Pricing</a>
-        <a href="request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="signup_started">Start free</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
       </nav>
     </header>
 
     <main class="legal-shell">
       <p class="eyebrow">Privacy</p>
-      <h1>Access-request data is only used to provision Linje.</h1>
+      <h1>Account and analytics data stay narrowly scoped.</h1>
       <p>
-        When you request access by email, Linje uses the information you send to respond and
-        provision access to the portal and project setup flow.
+        Linje uses your account email to deliver magic links and operate your portal account. It is
+        not included in PostHog events.
       </p>
       <p>
         When analytics are configured, the public site records page views, the market surface that
@@ -45,20 +45,21 @@
         analytics.
       </p>
       <p>
-        PostHog runs in cookieless mode. A first-visit surface and campaign may be stored only for
-        the current browser-tab session so a later access request can be attributed to the page
-        that introduced Linje. Google Search Console provides aggregate search-query and
-        page-performance data for the site.
+        PostHog runs in cookieless mode. The first market surface and campaign are kept in the
+        browser-tab session and passed to signup as bounded first-touch attribution. Product events
+        use opaque identifiers and never include customer email content or application metadata.
+        Google Search Console provides aggregate search-query and page-performance data for the
+        site.
       </p>
       <p>
-        To request removal of access-request data, email
+        To request removal of account or analytics data, email
         <a href="mailto:hello@linje.systems">hello@linje.systems</a>.
       </p>
       <div class="legal-actions">
         <a href="index.html">Home</a>
         <a href="docs/index.html">Docs</a>
         <a href="pricing/">Pricing</a>
-        <a href="request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="signup_started">Start free</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
       </div>
     </main>

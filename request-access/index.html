@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Request Access | Linje</title>
+    <title>Start Free | Linje</title>
     <meta
       name="description"
-      content="Request access to Linje for transactional email and inbound email webhooks."
+      content="Start using Linje for transactional email, inbound webhooks, and correlated replies. Free during preview."
     />
-    <meta property="og:title" content="Request Access | Linje" />
-    <meta property="og:description" content="Request access to Linje for transactional email, inbound email webhooks, or both." />
+    <meta property="og:title" content="Start Free | Linje" />
+    <meta property="og:description" content="Create a Linje account with a magic link and start integrating immediately." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://linje.systems/request-access/" />
     <meta name="twitter:card" content="summary" />
@@ -34,7 +34,7 @@
         <a href="../inbound-email-api/">Inbound email</a>
         <a href="../reply-by-email-api/">Replies</a>
         <a href="../pricing/">Pricing</a>
-        <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="signup_started">Start free</a>
         <a href="https://api.linje.systems/portal/login">Sign in</a>
       </nav>
     </header>
@@ -42,35 +42,33 @@
     <main class="signal-main">
       <section class="signup-section">
         <div class="signup-copy">
-          <p class="eyebrow">Request access</p>
+          <p class="eyebrow">Self-service preview</p>
           <h1>Start with the email boundary your app needs.</h1>
           <p>
-            Public signup is currently closed while the hosted service stays small. Send us a
-            short email and we will reply directly.
+            Sign in with a magic link, create a project, and copy the API token. Linje is free
+            during preview, with conservative limits and no payment details required.
           </p>
         </div>
 
         <div class="signup-closed-card">
-          <p class="signup-closed-title">What to include</p>
+          <p class="signup-closed-title">No access request required</p>
           <p>
-            Tell us what you want to launch first: transactional email, inbound email and replies,
-            or both. If you are testing replies, tell us how you would solve the same flow without
-            Linje. Company and expected volume are helpful but optional.
+            Start with transactional sending, inbound email, or reply routing. They are different
+            entry points into the same bidirectional application-email product.
           </p>
           <div class="signup-closed-actions">
             <a
               class="button button-primary"
-              href="mailto:hello@linje.systems?subject=Linje%20access"
-              data-track="cta_request_access_email"
-              data-event="access_request_started"
-              data-access-context
-              >Email hello@linje.systems</a
+              href="https://api.linje.systems/portal/login"
+              data-track="cta_start_free"
+              data-event="signup_started"
+              >Start free</a
             >
             <a
               class="button button-ghost"
               href="https://api.linje.systems/portal/login"
-              data-track="cta_request_access_sign_in"
-              >Already have access? Sign in</a
+              data-track="cta_start_sign_in"
+              >Sign in</a
             >
           </div>
         </div>
