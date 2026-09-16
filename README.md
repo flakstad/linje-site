@@ -57,7 +57,7 @@ deployment:
 1. Create a **Domain property** for `linje.systems` in Google Search Console.
 2. Add Google's verification TXT record to DNS and verify the property.
 3. Submit `https://linje.systems/sitemap.xml`.
-4. Inspect the five market-surface URLs and request indexing if Google has not discovered them.
+4. Inspect the six market-surface URLs and request indexing if Google has not discovered them.
 5. Use query, page, and country reports as the acquisition layer; use PostHog for on-site CTA and
    access-flow behavior.
 

@@ -39,11 +39,12 @@
         <a href="#overview">Overview</a>
         <a href="#sidecar">Keep your provider</a>
         <a href="#use-cases">Use cases</a>
-        <a href="#why">Why routes</a>
+        <a href="#why">Route abstraction</a>
         <a href="#create">Create route</a>
         <a href="#send">Use Reply-To</a>
         <a href="#payload">Receive reply</a>
         <a href="#lifecycle">Lifecycle</a>
+        <a href="#both-directions">Both directions</a>
         <a href="#boundary">Boundary</a>
         <a href="#pilot">Pilot</a>
       </aside>
@@ -66,6 +67,7 @@
             correlation, signed delivery, retries, and replay. Moving outbound email to Linje is
             optional.
           </p>
+          <p><a href="../inbound-email-for-amazon-ses/">See the Amazon SES sidecar guide.</a></p>
         </section>
 
         <section id="use-cases" class="docs-section">
@@ -92,28 +94,33 @@
         <section id="why" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Why reply routes</p>
-            <h2>Make correlation explicit instead of reconstructing it later.</h2>
+            <h2>Use an application abstraction instead of assembling correlation primitives.</h2>
           </div>
-          <div class="docs-table" role="table" aria-label="Reply correlation comparison">
+          <p>
+            Some email providers expose recipient tags or other inbound primitives. Linje manages
+            the route, its immutable application context, and the delivery lifecycle as one
+            project-scoped resource.
+          </p>
+          <div class="docs-table" role="table" aria-label="Generic inbound primitives and Linje reply routes">
             <div class="docs-row docs-head" role="row">
-              <span role="columnheader">Without a route</span>
-              <span role="columnheader">With Linje</span>
-              <span role="columnheader">Result</span>
+              <span role="columnheader">Generic inbound primitives</span>
+              <span role="columnheader">Linje reply route</span>
+              <span role="columnheader">Application result</span>
             </div>
             <div class="docs-row" role="row">
-              <span role="cell">Parse subjects and threading headers</span>
-              <span role="cell">Correlate by recipient address</span>
-              <span role="cell">Stable application metadata</span>
+              <span role="cell">Generate a token and persist its mapping</span>
+              <span role="cell">Create a route with immutable metadata</span>
+              <span role="cell">Context arrives in the event</span>
             </div>
             <div class="docs-row" role="row">
-              <span role="cell">Expose a business ID in the address</span>
-              <span role="cell">Use an opaque token</span>
-              <span role="cell">No identifier leakage</span>
+              <span role="cell">Own token lifecycle, expiry, and lookup</span>
+              <span role="cell">Manage one opaque route resource</span>
+              <span role="cell">No business identifier in the address</span>
             </div>
             <div class="docs-row" role="row">
-              <span role="cell">Build inbound storage and delivery</span>
-              <span role="cell">Receive a signed, replayable webhook</span>
-              <span role="cell">Inspectable failure handling</span>
+              <span role="cell">Integrate provider-specific delivery semantics</span>
+              <span role="cell">Receive a signed, replayable event</span>
+              <span role="cell">One inspectable reply boundary</span>
             </div>
           </div>
         </section>
@@ -219,6 +226,19 @@ x-linje-signature: sha256=...
           <p><a href="https://api.linje.systems/v1/openapi.json">Inspect the complete OpenAPI 3.1 contract.</a></p>
         </section>
 
+        <section id="both-directions" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">The complete product</p>
+            <h2>Want one system for both directions?</h2>
+          </div>
+          <p>
+            Linje also sends transactional email, with idempotent enqueueing, retries, delivery
+            events, bounce handling, suppression, and inspectable timelines. Keeping your current
+            sender is an adoption option, not a product limitation.
+          </p>
+          <p><a href="../transactional-email-api/">See the transactional email API.</a></p>
+        </section>
+
         <section id="boundary" class="docs-section">
           <div class="section-heading">
             <p class="eyebrow">Boundary</p>
@@ -238,7 +258,7 @@ x-linje-signature: sha256=...
           </p>
           <p>
             <a class="button button-primary" href="../request-access/" data-track="cta_reply_pilot"
-              >Pilot reply routing</a
+              >Add replies to one real email flow</a
             >
             <a class="button button-ghost" href="../docs/" data-track="cta_reply_docs"
               >Read the API docs</a

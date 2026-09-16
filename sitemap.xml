@@ -25,6 +25,9 @@
     <loc>https://linje.systems/reply-by-email-api/</loc>
   </url>
   <url>
+    <loc>https://linje.systems/inbound-email-for-amazon-ses/</loc>
+  </url>
+  <url>
     <loc>https://linje.systems/webhook-replay/</loc>
   </url>
   <url>

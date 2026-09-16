@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inbound Email for Amazon SES | Linje</title>
+    <meta
+      name="description"
+      content="Keep Amazon SES for transactional sending. Add application-aware email replies without assembling receipt rules, S3, Lambda, MIME parsing, correlation, and webhook delivery."
+    />
+    <meta property="og:title" content="Inbound Email for Amazon SES | Linje" />
+    <meta
+      property="og:description"
+      content="Keep SES for sending. Turn replies into signed events on the right application object."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.systems/inbound-email-for-amazon-ses/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/inbound-email-for-amazon-ses/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page" data-surface="inbound-email-for-amazon-ses">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-api/">Inbound email</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">Amazon SES</p>
+        <a href="#overview">Overview</a>
+        <a href="#build-or-buy">Build or buy</a>
+        <a href="#route">Create route</a>
+        <a href="#reply-to">Use with SES</a>
+        <a href="#event">Receive event</a>
+        <a href="#both-directions">Both directions</a>
+        <a href="#pilot">Try one flow</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="overview" class="docs-hero">
+          <p class="eyebrow">Inbound email for Amazon SES</p>
+          <h1>Keep SES for sending. Add application-aware replies.</h1>
+          <p class="subhead">
+            Put a Linje-generated address in <code>Reply-To</code>. When the recipient replies,
+            Linje returns the message, attachments, and original application context as a signed,
+            replayable webhook event.
+          </p>
+        </section>
+
+        <section id="build-or-buy" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">A separate inbound boundary</p>
+            <h2>Do not assemble the inbound half of SES unless you want to own it.</h2>
+          </div>
+          <p>
+            Amazon SES can receive email. Its native model uses receipt rules and can pass messages
+            through services such as S3, SNS, and Lambda. Your application then owns the remaining
+            parsing, correlation, delivery, and operational lifecycle.
+          </p>
+          <div class="docs-table" role="table" aria-label="Amazon SES inbound build and Linje sidecar comparison">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Build on SES receiving</span>
+              <span role="columnheader">Add Linje inbound</span>
+              <span role="columnheader">What stays yours</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Configure receipt rules and AWS resources</span>
+              <span role="cell">Use a hosted inbound address</span>
+              <span role="cell">Your SES outbound setup</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Store or transport raw MIME</span>
+              <span role="cell">Receive normalized content and attachment references</span>
+              <span role="cell">Your application workflow</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Persist token-to-object mappings</span>
+              <span role="cell">Create an opaque route with immutable metadata</span>
+              <span role="cell">Your object and authorization model</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Build callback signing, retry, replay, and inspection</span>
+              <span role="cell">Receive a signed, retryable, replayable event</span>
+              <span role="cell">Your idempotent event handler</span>
+            </div>
+          </div>
+          <p>
+            <a href="https://docs.aws.amazon.com/ses/latest/dg/receiving-email-concepts.html"
+              >Read Amazon's SES receiving model.</a
+            >
+          </p>
+        </section>
+
+        <section id="route" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Application context</p>
+            <h2>Create a reply route for one real object.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "Idempotency-Key: 018f47d2-89ab-4cde-8123-456789abcdef" \
+  -H "content-type: application/json" \
+  -d '{
+    "inbox-id":"claims",
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    }
+  }' \
+  https://api.linje.systems/v1/reply-routes</code></pre>
+          <pre><code>{
+  "reply-route": {
+    "id":"route_...",
+    "address":"r+012345...@in.linje.systems",
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    }
+  }
+}</code></pre>
+        </section>
+
+        <section id="reply-to" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">No outbound migration</p>
+            <h2>Keep the SES send path unchanged.</h2>
+          </div>
+          <pre><code>From: claims@example.com
+To: customer@example.com
+Reply-To: r+012345...@in.linje.systems
+Subject: Claim claim_123</code></pre>
+          <p>
+            Continue using your SES identities, templates, reputation, bounce handling, and sending
+            code. The only change to this flow is the generated <code>Reply-To</code> value.
+          </p>
+        </section>
+
+        <section id="event" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Reply to application event</p>
+            <h2>Receive the reply with the route context attached.</h2>
+          </div>
+          <pre><code>POST https://app.example.com/linje/inbound
+x-linje-inbound-id: ...
+x-linje-delivery-id: ...
+x-linje-timestamp: ...
+x-linje-signature: sha256=...
+
+{
+  "schema":"linje.inbound-email.v1",
+  "route": {
+    "id":"route_...",
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    }
+  },
+  "content":{"text":"The requested photo is attached."},
+  "attachments":[
+    {"filename":"photo.pdf","download":{"url":"https://api.linje.systems/..."}}
+  ]
+}</code></pre>
+        </section>
+
+        <section id="both-directions" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">The complete product</p>
+            <h2>Linje can also send the outbound email.</h2>
+          </div>
+          <p>
+            The SES sidecar is one adoption path. Linje remains bidirectional application email
+            infrastructure: transactional email out, inbound email and replies back into your
+            application. Move neither, either, or both directions based on the boundary you need.
+          </p>
+          <p><a href="../transactional-email-api/">See Linje's transactional email API.</a></p>
+        </section>
+
+        <section id="pilot" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Production-like test</p>
+            <h2>Add replies to one real SES email flow.</h2>
+          </div>
+          <p>
+            Choose one order, claim, case, or document request. Keep the existing SES send, add the
+            generated <code>Reply-To</code>, and verify that a real reply reaches the correct object.
+          </p>
+          <p>
+            <a
+              class="button button-primary"
+              href="../request-access/"
+              data-track="cta_ses_reply_pilot"
+              >Add replies to one real SES email flow</a
+            >
+            <a class="button button-ghost" href="../docs/" data-track="cta_ses_docs"
+              >Read the API docs</a
+            >
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-api/">Inbound email API</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../webhook-replay/">Replay</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../request-access/">Request access</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+    <script src="../site-config.js"></script>
+    <script src="../app.js"></script>
+  </body>
+</html>
