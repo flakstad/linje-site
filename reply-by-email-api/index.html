@@ -38,6 +38,7 @@
         <p class="eyebrow">Guide</p>
         <a href="#overview">Overview</a>
         <a href="#sidecar">Keep your provider</a>
+        <a href="#providers">Provider guides</a>
         <a href="#use-cases">Use cases</a>
         <a href="#why">Route abstraction</a>
         <a href="#create">Create route</a>
@@ -62,12 +63,36 @@
             <h2>Keep your current outbound provider.</h2>
           </div>
           <p>
-            Continue sending through Resend, Postmark, SES, or your existing email stack. Put the
-            Linje-generated address in <code>Reply-To</code>; Linje handles the inbound reply,
-            correlation, signed delivery, retries, and replay. Moving outbound email to Linje is
-            optional.
+            Continue sending through Resend, SendGrid, Mailgun, SES, or your existing email stack.
+            Put the Linje-generated address in <code>Reply-To</code>; Linje handles the inbound
+            reply, correlation, signed delivery, retries, and replay. Moving outbound email to
+            Linje is optional.
           </p>
-          <p><a href="../inbound-email-for-amazon-ses/">See the Amazon SES sidecar guide.</a></p>
+        </section>
+
+        <section id="providers" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Provider guides</p>
+            <h2>Keep the sender you already use.</h2>
+          </div>
+          <div class="quickstart-grid">
+            <a href="../inbound-email-for-amazon-ses/">
+              <strong>Amazon SES</strong>
+              <span>Add replies without assembling receipt rules, storage, parsing, and correlation.</span>
+            </a>
+            <a href="../sendgrid-inbound-parse-alternative/">
+              <strong>SendGrid</strong>
+              <span>Compare Inbound Parse with application-aware reply routes.</span>
+            </a>
+            <a href="../mailgun-inbound-email-alternative/">
+              <strong>Mailgun</strong>
+              <span>Compare Routes and Forwards with managed per-object addresses.</span>
+            </a>
+            <a href="../resend-inbound-email-alternative/">
+              <strong>Resend</strong>
+              <span>Add explicit route metadata and lifecycle to correlated replies.</span>
+            </a>
+          </div>
         </section>
 
         <section id="use-cases" class="docs-section">

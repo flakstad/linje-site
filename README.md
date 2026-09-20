@@ -54,18 +54,15 @@ PostHog ignores cookieless events when the project-side setting is disabled.
 
 ## Google Search Console
 
-The repository already exposes `robots.txt` and `sitemap.xml`. Complete the external setup after
-deployment:
+The Google Search Console Domain property is configured, and the repository exposes `robots.txt`
+and `sitemap.xml`. After deployment:
 
-1. Create a **Domain property** for `linje.systems` in Google Search Console.
-2. Add Google's verification TXT record to DNS and verify the property.
-3. Submit `https://linje.systems/sitemap.xml`.
-4. Inspect the six market-surface URLs and request indexing if Google has not discovered them.
-5. Use query, page, and country reports as the acquisition layer; use PostHog for on-site CTA and
+1. Submit or resubmit `https://linje.systems/sitemap.xml`.
+2. Inspect the nine market-surface URLs and request indexing if Google has not discovered them.
+3. Use query, page, and country reports as the acquisition layer; use PostHog for on-site CTA and
    access-flow behavior.
 
-DNS verification and Search Console property creation are external production changes and are not
-performed by this repository.
+Search Console changes remain external production actions and are not performed by this repository.
 
 ## Deploy (GitHub Pages)
 

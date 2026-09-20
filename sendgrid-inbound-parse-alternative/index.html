@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SendGrid Inbound Parse Alternative for Reply Routing | Linje</title>
+    <meta
+      name="description"
+      content="Keep SendGrid for outbound email. Use Linje when each customer reply needs durable application context, a JSON event, delivery inspection, and replay."
+    />
+    <meta property="og:title" content="SendGrid Inbound Parse Alternative for Reply Routing | Linje" />
+    <meta
+      property="og:description"
+      content="Keep SendGrid for sending. Turn replies into signed JSON events on the right application object."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.systems/sendgrid-inbound-parse-alternative/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/sendgrid-inbound-parse-alternative/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page" data-surface="sendgrid-inbound-parse-alternative">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-api/">Inbound email</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="linje.signup_started">Start free</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">SendGrid</p>
+        <a href="#overview">Overview</a>
+        <a href="#comparison">Compare</a>
+        <a href="#route">Create route</a>
+        <a href="#send">Keep SendGrid</a>
+        <a href="#event">Receive event</a>
+        <a href="#choose">When to choose</a>
+        <a href="#start">Start</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="overview" class="docs-hero">
+          <p class="eyebrow">SendGrid Inbound Parse alternative</p>
+          <h1>Keep SendGrid for sending. Route replies with application context.</h1>
+          <p class="subhead">
+            SendGrid Inbound Parse is a capable general-purpose inbound webhook. Choose Linje when
+            the main job is to attach every reply to the correct order, claim, case, or workflow
+            without maintaining your own address-to-object mapping.
+          </p>
+        </section>
+
+        <section id="comparison" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Different abstractions</p>
+            <h2>Parsed email webhook or application-aware reply route?</h2>
+          </div>
+          <p>
+            SendGrid receives mail for a configured hostname and posts parsed fields and
+            attachments as <code>multipart/form-data</code>. It supports webhook security policies
+            and retries unsuccessful 5xx requests. Linje starts one level higher: your application
+            creates an opaque reply address with immutable metadata, then receives normalized JSON
+            carrying that same context.
+          </p>
+          <div class="docs-table" role="table" aria-label="SendGrid Inbound Parse and Linje reply route comparison">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Concern</span>
+              <span role="columnheader">SendGrid Inbound Parse</span>
+              <span role="columnheader">Linje reply route</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Inbound payload</span>
+              <span role="cell">Parsed multipart form fields, attachments, or raw MIME</span>
+              <span role="cell">Versioned JSON plus attachment download references</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Object correlation</span>
+              <span role="cell">Your application creates and persists the recipient mapping</span>
+              <span role="cell">Route metadata is returned in the inbound event</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Address lifecycle</span>
+              <span role="cell">Your application owns generated tokens and expiry</span>
+              <span role="cell">Create, list, expire, enable, or disable route resources</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Delivery operations</span>
+              <span role="cell">Automatic retry for unsuccessful webhook delivery</span>
+              <span role="cell">Attempt history, stable event identity, and manual replay</span>
+            </div>
+          </div>
+          <p>
+            <a href="https://www.twilio.com/docs/sendgrid/for-developers/parsing-email/setting-up-the-inbound-parse-webhook"
+              >Read the official SendGrid Inbound Parse setup documentation.</a
+            >
+          </p>
+        </section>
+
+        <section id="route" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Application context</p>
+            <h2>Create one reply route for one real object.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "Idempotency-Key: 018f47d2-89ab-4cde-8123-456789abcdef" \
+  -H "content-type: application/json" \
+  -d '{
+    "inbox-id":"support",
+    "metadata":{
+      "ticket_id":"ticket_4821",
+      "account_id":"acct_91"
+    }
+  }' \
+  https://api.linje.systems/v1/reply-routes</code></pre>
+          <pre><code>{
+  "reply-route": {
+    "id":"route_...",
+    "address":"r+012345...@in.linje.systems",
+    "metadata":{
+      "ticket_id":"ticket_4821",
+      "account_id":"acct_91"
+    }
+  }
+}</code></pre>
+        </section>
+
+        <section id="send" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">No outbound migration</p>
+            <h2>Use the route as Reply-To in your SendGrid message.</h2>
+          </div>
+          <pre><code>{
+  "personalizations":[{
+    "to":[{"email":"customer@example.com"}]
+  }],
+  "from":{"email":"support@example.com"},
+  "reply_to":{"email":"r+012345...@in.linje.systems"},
+  "subject":"Ticket ticket_4821",
+  "content":[{"type":"text/plain","value":"Reply with the requested details."}]
+}</code></pre>
+          <p>
+            Your SendGrid templates, sending domains, reputation, and delivery workflow stay in
+            place. Only the <code>Reply-To</code> value changes for messages that need a correlated
+            response.
+          </p>
+        </section>
+
+        <section id="event" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Reply to application event</p>
+            <h2>Receive JSON with the original route metadata.</h2>
+          </div>
+          <pre><code>POST https://app.example.com/linje/inbound
+x-linje-inbound-id: ...
+x-linje-delivery-id: ...
+x-linje-timestamp: ...
+x-linje-signature: sha256=...
+
+{
+  "schema":"linje.inbound-email.v1",
+  "route":{
+    "id":"route_...",
+    "metadata":{
+      "ticket_id":"ticket_4821",
+      "account_id":"acct_91"
+    }
+  },
+  "content":{"text":"Here are the requested details."},
+  "attachments":[]
+}</code></pre>
+        </section>
+
+        <section id="choose" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Decision guide</p>
+            <h2>Use the boundary that matches the job.</h2>
+          </div>
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Choose SendGrid Inbound Parse</strong>
+              <p>You want general inbound parsing and are comfortable owning routing state and delivery operations.</p>
+            </div>
+            <div class="note">
+              <strong>Choose Linje as a sidecar</strong>
+              <p>You want to keep SendGrid outbound while replies arrive with managed object context.</p>
+            </div>
+            <div class="note">
+              <strong>Choose Linje both ways</strong>
+              <p>You want one API boundary for transactional sending and inbound application email.</p>
+            </div>
+          </div>
+          <p><a href="../reply-by-email-api/">Read the complete reply-by-email guide.</a></p>
+        </section>
+
+        <section id="start" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Self-service quickstart</p>
+            <h2>Add replies to one real SendGrid email flow.</h2>
+          </div>
+          <p>Create one route, use it as <code>Reply-To</code>, and verify that a real response reaches the correct application object.</p>
+          <p>
+            <a class="button button-primary" href="https://api.linje.systems/portal/login" data-track="cta_sendgrid_reply_start" data-event="linje.signup_started"
+              >Add replies to a SendGrid flow</a
+            >
+            <a class="button button-ghost" href="../docs/" data-track="cta_sendgrid_docs">Read the API docs</a>
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-api/">Inbound email API</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../webhook-replay/">Replay</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="linje.signup_started">Start free</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+    <script src="../site-config.js"></script>
+    <script src="../app.js"></script>
+  </body>
+</html>

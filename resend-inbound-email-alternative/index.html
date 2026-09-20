@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resend Inbound Email Alternative for Reply Routing | Linje</title>
+    <meta
+      name="description"
+      content="Compare Resend Inbound with Linje reply routes. Keep Resend for sending and use a managed address when replies need application metadata and lifecycle."
+    />
+    <meta property="og:title" content="Resend Inbound Email Alternative for Reply Routing | Linje" />
+    <meta
+      property="og:description"
+      content="Keep Resend for sending. Give every customer reply durable application context."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.systems/resend-inbound-email-alternative/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/resend-inbound-email-alternative/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page" data-surface="resend-inbound-email-alternative">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-api/">Inbound email</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="linje.signup_started">Start free</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">Resend</p>
+        <a href="#overview">Overview</a>
+        <a href="#honest">What Resend does</a>
+        <a href="#difference">The difference</a>
+        <a href="#route">Create route</a>
+        <a href="#send">Keep Resend</a>
+        <a href="#choose">When to choose</a>
+        <a href="#start">Start</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="overview" class="docs-hero">
+          <p class="eyebrow">Resend inbound email alternative</p>
+          <h1>Keep Resend for sending. Give every reply application context.</h1>
+          <p class="subhead">
+            Resend already offers a strong general inbound email product. Linje is an alternative
+            for a narrower problem: generating one managed reply address per order, claim, case, or
+            workflow and returning its immutable metadata with every response.
+          </p>
+        </section>
+
+        <section id="honest" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">A real comparison</p>
+            <h2>Resend Inbound is not missing the basics.</h2>
+          </div>
+          <p>
+            Resend accepts email on a provided or custom domain, emits structured JSON, stores
+            received messages and attachments, signs webhook requests, retries failed delivery,
+            exposes delivery attempts, and supports replay. If your job is to receive mail at a
+            stable address and trigger an automation, Resend may already be the right fit.
+          </p>
+          <p>
+            <a href="https://www.resend.com/features/inbound">Read the official Resend Inbound overview.</a>
+            <a href="https://www.resend.com/features/webhooks">Read the official Resend webhook overview.</a>
+          </p>
+        </section>
+
+        <section id="difference" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">The narrower Linje primitive</p>
+            <h2>Model the reply address as part of your application.</h2>
+          </div>
+          <div class="docs-table" role="table" aria-label="Resend Inbound and Linje reply route comparison">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Concern</span>
+              <span role="columnheader">Resend Inbound</span>
+              <span role="columnheader">Linje reply route</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Address model</span>
+              <span role="cell">Receive at aliases on a provided or custom inbound domain</span>
+              <span role="cell">Create an opaque address as a project-scoped API resource</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Object correlation</span>
+              <span role="cell">Your application chooses an alias and maintains its mapping</span>
+              <span role="cell">Immutable caller metadata is returned inside the event</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Lifecycle</span>
+              <span role="cell">Your application controls whether an alias remains meaningful</span>
+              <span role="cell">Expire, disable, enable, and list individual reply routes</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Webhook operations</span>
+              <span role="cell">Signed JSON, automatic retries, attempts, and replay</span>
+              <span role="cell">Signed JSON, automatic retries, attempts, and replay</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Best fit</span>
+              <span role="cell">General inbound processing and email-triggered workflows</span>
+              <span role="cell">Replies that must resolve directly to one application object</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="route" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Application context</p>
+            <h2>Create a reply route with the object metadata.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "Idempotency-Key: 018f47d2-89ab-4cde-8123-456789abcdef" \
+  -H "content-type: application/json" \
+  -d '{
+    "inbox-id":"orders",
+    "metadata":{
+      "order_id":"order_82921",
+      "customer_id":"cus_17"
+    }
+  }' \
+  https://api.linje.systems/v1/reply-routes</code></pre>
+          <pre><code>{
+  "reply-route":{
+    "id":"route_...",
+    "address":"r+012345...@in.linje.systems",
+    "metadata":{
+      "order_id":"order_82921",
+      "customer_id":"cus_17"
+    },
+    "active":true
+  }
+}</code></pre>
+        </section>
+
+        <section id="send" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">No outbound migration</p>
+            <h2>Use the route as Reply-To in the Resend message.</h2>
+          </div>
+          <pre><code>From: orders@example.com
+To: customer@example.com
+Reply-To: r+012345...@in.linje.systems
+Subject: Order order_82921</code></pre>
+          <p>
+            Keep Resend templates, domains, sending code, and deliverability operations. When the
+            customer responds, Linje returns the reply with <code>order_id</code> and
+            <code>customer_id</code> already attached.
+          </p>
+        </section>
+
+        <section id="choose" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Decision guide</p>
+            <h2>Do not add another service without a concrete reason.</h2>
+          </div>
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Stay with Resend Inbound</strong>
+              <p>You need a mailbox-style alias or general inbound automation and can own correlation.</p>
+            </div>
+            <div class="note">
+              <strong>Add Linje as a sidecar</strong>
+              <p>You want managed, expiring per-object reply addresses while keeping Resend outbound.</p>
+            </div>
+            <div class="note">
+              <strong>Use Linje both ways</strong>
+              <p>You want transactional sending and correlated replies behind one application boundary.</p>
+            </div>
+          </div>
+          <p><a href="../reply-by-email-api/">Read the complete reply-by-email guide.</a></p>
+        </section>
+
+        <section id="start" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Self-service quickstart</p>
+            <h2>Test one object-aware reply alongside Resend.</h2>
+          </div>
+          <p>Create one route, put it in <code>Reply-To</code>, and verify that the response reaches the right object without a separate alias lookup.</p>
+          <p>
+            <a class="button button-primary" href="https://api.linje.systems/portal/login" data-track="cta_resend_reply_start" data-event="linje.signup_started"
+              >Add replies to a Resend flow</a
+            >
+            <a class="button button-ghost" href="../docs/" data-track="cta_resend_docs">Read the API docs</a>
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-api/">Inbound email API</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../webhook-replay/">Replay</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="linje.signup_started">Start free</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+    <script src="../site-config.js"></script>
+    <script src="../app.js"></script>
+  </body>
+</html>

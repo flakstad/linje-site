@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mailgun Inbound Email Alternative for Reply Routing | Linje</title>
+    <meta
+      name="description"
+      content="Keep Mailgun for sending. Compare Mailgun Routes and Forwards with Linje reply routes for per-object metadata, lifecycle, signed JSON delivery, and replay."
+    />
+    <meta property="og:title" content="Mailgun Inbound Email Alternative for Reply Routing | Linje" />
+    <meta
+      property="og:description"
+      content="Keep Mailgun outbound. Make every reply address a managed application resource."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linje.systems/mailgun-inbound-email-alternative/" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://linje.systems/mailgun-inbound-email-alternative/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;700;800&amp;family=Oxanium:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../docs/docs.css" />
+  </head>
+  <body class="docs-page" data-surface="mailgun-inbound-email-alternative">
+    <div class="signal-grid" aria-hidden="true"></div>
+    <header class="concept-bar docs-bar">
+      <a class="brand" href="../index.html">Linje</a>
+      <nav class="site-nav" aria-label="Top navigation">
+        <a href="../index.html">Home</a>
+        <a href="../docs/">Docs</a>
+        <a href="../inbound-email-api/">Inbound email</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="linje.signup_started">Start free</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-nav">
+        <p class="eyebrow">Mailgun</p>
+        <a href="#overview">Overview</a>
+        <a href="#models">Routing models</a>
+        <a href="#comparison">Compare</a>
+        <a href="#route">Create route</a>
+        <a href="#send">Keep Mailgun</a>
+        <a href="#choose">When to choose</a>
+        <a href="#start">Start</a>
+      </aside>
+
+      <article class="docs-main">
+        <section id="overview" class="docs-hero">
+          <p class="eyebrow">Mailgun inbound email alternative</p>
+          <h1>Keep Mailgun for sending. Make each reply address an application resource.</h1>
+          <p class="subhead">
+            Mailgun provides flexible inbound Routes and a scalable Forwards API. Linje is narrower:
+            it gives each application object an opaque reply address with immutable metadata,
+            explicit lifecycle, and an inspectable webhook delivery history.
+          </p>
+        </section>
+
+        <section id="models" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Mailgun already does inbound</p>
+            <h2>The question is which routing model your application needs.</h2>
+          </div>
+          <p>
+            Mailgun Routes combine filters with <code>forward()</code>, <code>store()</code>, and
+            <code>stop()</code> actions. Its newer Forwards API matches recipient patterns and sends
+            messages to email addresses, URLs, or temporary storage. Both are useful when the
+            routing rule itself is the product primitive.
+          </p>
+          <p>
+            Linje uses a different primitive: a project-scoped route representing one order,
+            ticket, claim, case, or other application object. The callback contains the immutable
+            metadata supplied when that route was created.
+          </p>
+          <p>
+            <a href="https://documentation.mailgun.com/docs/mailgun/user-manual/receive-forward-store/routes"
+              >Read the official Mailgun Routes documentation.</a
+            >
+            <a href="https://documentation.mailgun.com/docs/mailgun/user-manual/receive-forward-store/forwards"
+              >Read the official Mailgun Forwards documentation.</a
+            >
+          </p>
+        </section>
+
+        <section id="comparison" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">A narrower boundary</p>
+            <h2>Use Linje when correlation and lifecycle are the core job.</h2>
+          </div>
+          <div class="docs-table" role="table" aria-label="Mailgun inbound routing and Linje reply route comparison">
+            <div class="docs-row docs-head" role="row">
+              <span role="columnheader">Concern</span>
+              <span role="columnheader">Mailgun inbound</span>
+              <span role="columnheader">Linje reply route</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Matching</span>
+              <span role="cell">Route expressions, headers, catch-all filters, or forward patterns</span>
+              <span role="cell">One opaque generated address for one application object</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Application context</span>
+              <span role="cell">Your application maps the matched recipient or captured value</span>
+              <span role="cell">Immutable caller metadata travels with the inbound event</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Inbound payload</span>
+              <span role="cell">URL-encoded or multipart form fields, with raw MIME available</span>
+              <span role="cell">Versioned JSON plus attachment download references</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Delivery</span>
+              <span role="cell">Signed request, automatic retries, optional temporary storage</span>
+              <span role="cell">Signed delivery, stored artifact, attempt history, and manual replay</span>
+            </div>
+            <div class="docs-row" role="row">
+              <span role="cell">Lifecycle</span>
+              <span role="cell">Manage the route or forward rule and your mapping state</span>
+              <span role="cell">Expire, disable, enable, and list reply-route resources</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="route" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Application context</p>
+            <h2>Create the address when you create the conversation.</h2>
+          </div>
+          <pre><code>curl -fsS \
+  -H "Authorization: Bearer $LINJE_PROJECT_TOKEN" \
+  -H "Idempotency-Key: 018f47d2-89ab-4cde-8123-456789abcdef" \
+  -H "content-type: application/json" \
+  -d '{
+    "inbox-id":"claims",
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    }
+  }' \
+  https://api.linje.systems/v1/reply-routes</code></pre>
+          <pre><code>{
+  "reply-route":{
+    "id":"route_...",
+    "address":"r+012345...@in.linje.systems",
+    "metadata":{
+      "claim_id":"claim_123",
+      "customer_id":"cus_17"
+    },
+    "active":true
+  }
+}</code></pre>
+        </section>
+
+        <section id="send" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">No outbound migration</p>
+            <h2>Keep the Mailgun send path unchanged.</h2>
+          </div>
+          <pre><code>curl --user "api:$MAILGUN_API_KEY" \
+  https://api.mailgun.net/v3/mg.example.com/messages \
+  -F from='Claims &lt;claims@example.com&gt;' \
+  -F to=customer@example.com \
+  -F h:Reply-To=r+012345...@in.linje.systems \
+  -F subject='Claim claim_123' \
+  -F text='Reply with the requested document.'</code></pre>
+          <p>
+            Mailgun continues to send the message. Linje receives only the reply and delivers a
+            signed JSON event containing <code>claim_id</code> and <code>customer_id</code> to your
+            application.
+          </p>
+        </section>
+
+        <section id="choose" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Decision guide</p>
+            <h2>Routes, Forwards, or reply routes?</h2>
+          </div>
+          <div class="inline-notes">
+            <div class="note">
+              <strong>Use Mailgun Routes</strong>
+              <p>You need expression-based filters and multi-action inbound processing.</p>
+            </div>
+            <div class="note">
+              <strong>Use Mailgun Forwards</strong>
+              <p>You need scalable recipient-pattern forwarding without complex conditional logic.</p>
+            </div>
+            <div class="note">
+              <strong>Use Linje reply routes</strong>
+              <p>You need each address to carry managed object context and its own lifecycle.</p>
+            </div>
+          </div>
+          <p><a href="../reply-by-email-api/">See the event payload and complete route lifecycle.</a></p>
+        </section>
+
+        <section id="start" class="docs-section">
+          <div class="section-heading">
+            <p class="eyebrow">Self-service quickstart</p>
+            <h2>Add correlated replies to one Mailgun email flow.</h2>
+          </div>
+          <p>Keep the existing send, set one Linje route as <code>Reply-To</code>, and process the reply using the returned metadata.</p>
+          <p>
+            <a class="button button-primary" href="https://api.linje.systems/portal/login" data-track="cta_mailgun_reply_start" data-event="linje.signup_started"
+              >Add replies to a Mailgun flow</a
+            >
+            <a class="button button-ghost" href="../docs/" data-track="cta_mailgun_docs">Read the API docs</a>
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer docs-footer">
+      <p>Linje</p>
+      <div>
+        <a href="../docs/">Docs</a>
+        <a href="../transactional-email-api/">Transactional email</a>
+        <a href="../inbound-email-api/">Inbound email API</a>
+        <a href="../reply-by-email-api/">Replies</a>
+        <a href="../webhook-replay/">Replay</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="https://api.linje.systems/portal/login" data-track="cta_nav_start_free" data-event="linje.signup_started">Start free</a>
+        <a href="https://api.linje.systems/portal/login">Sign in</a>
+        <a href="../privacy.html">Privacy</a>
+      </div>
+    </footer>
+    <script src="../site-config.js"></script>
+    <script src="../app.js"></script>
+  </body>
+</html>
