@@ -70,6 +70,7 @@ a {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
   align-items: center;
 }
 
@@ -508,6 +509,13 @@ pre {
 .site-nav a:hover,
 .legal-actions a:hover {
   color: var(--accent);
+}
+
+.footer-company {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
 }
 
 .legal-page {
